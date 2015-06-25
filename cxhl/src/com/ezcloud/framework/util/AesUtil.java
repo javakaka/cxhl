@@ -10,20 +10,14 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.ezcloud.framework.vo.IVO;
-import com.ezcloud.framework.vo.VOConvert;
-
 
 /**
  * description:
- * 
- * 
- * @author Franklin.Zhang --zhangyixuan
- * @date May 23, 2013 10:35:59 AM
  */
 public class AesUtil {
 //	private static final byte[] aesKey="@365@gl@@shi@ke@".getBytes();
-	private static final byte[] aesKey="fang@zhu@bao@app".getBytes();
+//	private static final byte[] aesKey="fang@zhu@bao@app".getBytes();
+	private static final byte[] aesKey="cxhl@chi@chi@app".getBytes();
 	private static SecretKey secretKey=new SecretKeySpec(aesKey,"AES");
 	
 	static{
@@ -116,7 +110,8 @@ public class AesUtil {
 	public static void main(String[] args) throws Exception {
 		
 //		String input = "10004";
-		String input = "{\"SERVICE\":{\"TYPE\":\"0\"},\"HEADER\":{\"COMPANY\":\"易之云科技有限公司\",\"VERSION\":\"4.0\",\"COPYRIGHT\":\"COPYRIGHT2010-2020\"},\"REQUEST\":{\"ROW\":[],\"DEFAULT\":{\"VERSION\":\"1.0\",\"USERNAME\":\"13826531136\",\"PASSWORD\":\"E10ADC3949BA59ABBE56E057F20F883E\"},\"DATASET\":[]}}";
+//		String input = "{\"SERVICE\":{\"TYPE\":\"0\"},\"HEADER\":{\"COMPANY\":\"易之云科技有限公司\",\"VERSION\":\"4.0\",\"COPYRIGHT\":\"COPYRIGHT2010-2020\"},\"REQUEST\":{\"ROW\":[],\"DEFAULT\":{\"VERSION\":\"1.0\",\"USERNAME\":\"13826531136\",\"PASSWORD\":\"E10ADC3949BA59ABBE56E057F20F883E\"},\"DATASET\":[]}}";
+		String input = "123456";
 		String encrptStr =  encode(input);
 		System.out.println("Encode:" +encrptStr);
 		System.out.println("Decode:" + decode(encrptStr));

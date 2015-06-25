@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ezshop>
-	<setting name="siteName" value="房租宝后台管理系统" />
-	<setting name="siteUrl" value="http://localhost:8080/fangzubao" />
-	<setting name="physicalPath" value="D:/WORK_SYSTEM/TOMCAT/apache-tomcat-7.0.53/webapps/fangzubao/" />
-	<setting name="logo" value="http://localhost:8080/fangzubao/upload/image/logo.gif" />
+	<setting name="siteName" value="吃香喝辣后台管理系统" />
+	<setting name="siteUrl" value="http://localhost:8080/cxhl" />
+	<setting name="physicalPath" value="/usr/local/tomcat/tomcat7/webapps/cxhl/" />
+	<setting name="logo" value="http://localhost:8080/cxhl/upload/image/logo.gif" />
 	<setting name="hotSearch" value="T恤,衬衫,西服,西裤,森马,七匹狼,梵希蔓,春夏新款,牛仔裤" />
 	<setting name="address" value="深圳市福田区" />
 	<setting name="phone" value="400-8888888" />

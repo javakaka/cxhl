@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd"
 	default-lazy-init="true">
 	<context:property-placeholder location="classpath*:/framework.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
-	<context:component-scan base-package="com.ezcloud.framework,com.fbsf">
+	<context:component-scan base-package="com.ezcloud.framework,com.cxhl">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">

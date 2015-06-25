@@ -6,21 +6,21 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd"
 	default-lazy-init="true">
 	<context:property-placeholder location="classpath*:/framework.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
-	<context:component-scan base-package="com.ezcloud.framework.controller,com.fbsf.fzb.controller" use-default-filters="false">
+	<context:component-scan base-package="com.ezcloud.framework.controller,com.cxhl.controller" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	<!-- http://www.121ask.com/thread-5495-1.html -->
 	<!--<mvc:annotation-driven />-->
 	<mvc:annotation-driven> 
-	<mvc:message-converters>   
+	<mvc:message-converters>
        <bean class="org.springframework.http.converter.StringHttpMessageConverter">   
-           <property name="supportedMediaTypes">   
-               <list>   
+           <property name="supportedMediaTypes">
+               <list>
                    <value>text/plain;charset=UTF-8</value>
                    <value>text/html;charset=UTF-8</value>
-               </list>   
-           </property>   
-       </bean>    
+               </list>
+           </property>
+       </bean>
     </mvc:message-converters>   
 	</mvc:annotation-driven> 
 	<!-- 拦截器 -->  
@@ -28,7 +28,7 @@
         <!-- 多个拦截器,顺序执行 -->  
         <mvc:interceptor>  
            <mvc:mapping path="/api/**/*.do" /><!-- 如果不配置或/*,将拦截所有的Controller -->  
-           <bean id="apiInterceptor" class="com.fbsf.fzb.interceptor.ApiInterceptor" />  
+           <bean id="apiInterceptor" class="com.cxhl.interceptor.ApiInterceptor" />  
         </mvc:interceptor>
     </mvc:interceptors> 
 	 <!--通用视图解析器-->

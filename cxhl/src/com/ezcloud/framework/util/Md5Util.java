@@ -70,6 +70,7 @@ public class Md5Util {
 //		String s3 = "E10ADC3949BA59ABBE56E057F20F883E";
 		// Md5("ezcloud");
 		System.out.println(ssss);
+		System.out.println(Md5Util.Md5("111111"));
 		System.out.println(Md5Util.Md5("000000"));
 //		System.out.println(ssss.equals(s3));
 //		System.out.println(Md5Util.Md5("000000"));
