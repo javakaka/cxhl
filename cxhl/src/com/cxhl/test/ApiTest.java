@@ -1,5 +1,7 @@
 package com.cxhl.test;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -1371,7 +1373,54 @@ public class ApiTest {
 			e.printStackTrace();
 		}
 	}
+	//微信app支付
+	public static void weixinAppPay()
+	{
+		String url ="http://localhost:8080/cxhl/api/pay/weixin/app/validate.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/pay/weixin/app/validate.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			ivo.set("order_id", "1");
+			ivo.set("app_ip", "192.168.11.99");
+			ivo.set("service_name", "cxhlWeiXinAppPayService");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
+	
+	public static void monitorS2WX()
+	{
+		String url ="https://api.mch.weixin.qq.com/pay/unifiedorder";
+		String postStr ="<xml><appid>wx44e3ee46a26f4e21</appid><mch_id>1251662201</mch_id><device_info></device_info><nonce_str>RGDJ6RQ62Y5MMHFYEHVFU5RUKTTL</nonce_str><sign>60D59E27413821B92EE1C4F2798774D3</sign><body>订单:2015062217343610001支付备注</body><detail></detail><attach></attach><out_trade_no>2015062217343610001</out_trade_no><fee_type>CNY</fee_type><total_fee>8000</total_fee><spbill_create_ip>192.168.11.99</spbill_create_ip><time_start></time_start><time_expire></time_expire><goods_tag></goods_tag><notify_url>http://localhost:8080/cxhl/notify/weixin/pay/app.do?order_no=3kLVUn/XTRB1bpSLU+EXAKhrD+UkGtrb1FIqwzqTASU=</notify_url><trade_type>APP</trade_type><product_id></product_id><openid></openid></xml>";
+		String response ="";
+		try {
+			response =NetUtil.getNetResponse(url, postStr);
+			response =new String(response.getBytes("utf-8"),"GBK");
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.print("response====>> \n"+response);
+	}
 	public static void main(String args[])
 	{
 		System.out.println("\n==========request start=============");
@@ -1457,7 +1506,11 @@ public class ApiTest {
 //		用户查询礼品详情
 //		queryUserGiftDetail();
 //		用户兑换礼品
-		queryExchangeGift();
+//		queryExchangeGift();
+//		微信app支付
+//		weixinAppPay();
+//		模拟调用统一支付接口
+		monitorS2WX();
 		System.out.println("\n==========request  end=============");
 	}
 	

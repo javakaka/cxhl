@@ -141,10 +141,20 @@ public class StringUtils {
 		return sb.toString();       
 	}
 	
+	public static String subStrBeforeDotNotIncludeDot(String str){
+		String result =str;
+		int iPos =result.indexOf(".");
+		if(iPos!= -1)
+		{
+			result =result.substring(0,iPos);
+		}
+		return result;
+	}
 	
 	public static void main(String[] args) {
 		String email ="510836102@qq.com";
 		boolean bool =isEmail(email);
 		System.out.println("bool:"+bool);
+		System.out.println(subStrBeforeDotNotIncludeDot(email));
 	}
 }

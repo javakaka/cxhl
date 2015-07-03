@@ -43,8 +43,7 @@ public class OrderService extends Service{
 	public Row find(String id)
 	{
 		Row row =null;
-		String sSql ="select a.id,a.type,a.c_name as shop_name,a.link_name,a.link_tel,a.longitude, "
-				+" a.latitude,a.star,a.address,a.detail,a.average_cost from cxhl_order a  "
+		String sSql ="select * from cxhl_order a  "
 				+" where a.id='"+id+"' ";
 		row =queryRow(sSql);
 		return row;

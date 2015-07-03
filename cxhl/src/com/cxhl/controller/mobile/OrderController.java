@@ -158,6 +158,7 @@ public class OrderController extends BaseController {
 		ovo =new OVO(0,"下单成功","下单成功");
 		ovo.set("order_no", order_no);
 		ovo.set("id", order_id);
+		
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));
 	}
 	
