@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HierarchyData</key>
+	<array>
+		<string>3FDB6598-03F5-495A-B7CF-AE2260F6A6D5</string>
+	</array>
+	<key>ProjectItems</key>
+	<dict>
+		<key>3FDB6598-03F5-495A-B7CF-AE2260F6A6D5</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9va6gDAAAAAAQQMAAAAAAAAAAAAAAAAAAAAAAAAAAA
+				AAAAAAAAAAAAAAAAAAAAjAIAAAUAAAABAQAAVXNlcnMA
+				AAAKAAAAAQEAAFRvbmdKaWFuYm8AAAYAAAABAQAAR2l0
+				SHViAAAEAAAAAQEAAGN4aGwUAAAAAQYAAAQAAAAUAAAA
+				KAAAADgAAAA4AAAACAAAAAQDAAC1kwIAAAAAAAgAAAAE
+				AwAAo3UGAAAAAAAIAAAABAMAAFEtpwAAAAAACAAAAAQD
+				AABGLcQAAAAAAAgAAAAEAwAAGwPLAAAAAAAUAAAAAQYA
+				AGAAAABwAAAAgAAAAJAAAACgAAAACAAAAAAEAABBux3s
+				GgAAABgAAAABAgAAAgAAAAAAAAAPAAAAAAAAAAAAAAAA
+				AAAAAAAAAAEFAAAEAAAAAwMAAAEAAAAEAAAAAwMAAAMA
+				AAAEAAAAAwMAAPYBAAARAAAAAQkAAGZpbGU6Ly9sb2Nh
+				bGhvc3QvAAAADAAAAAEBAABNYWNpbnRvc2ggSEQIAAAA
+				BAMAAACAgT10AAAACAAAAAAEAABBuhqpgwAAACQAAAAB
+				AQAANzExN0ZEQkUtRjE5MC0zM0JELTlDQTEtMkU0MUZF
+				MzU4NTAzGAAAAAECAACBAAAAAQAIAO8XAAABAAgAAAAA
+				AAAAAAABAAAAAQEAAC8AAACzAAAAAQIAAGE5YjkyODJl
+				MmFiNzI2NTY0NGI2ZDBmOTNkMWFlZWE2MTYwMGM5NzQ7
+				MDAwMDAwMDA7MDAwMDAwMDA7MDAwMDAwMDAwMDAwMDAy
+				MDtjb20uYXBwbGUuYXBwLXNhbmRib3gucmVhZC13cml0
+				ZTswMDAwMDAwMTswMTAwMDAwMjswMDAwMDAwMDAwY2Iw
+				MzFiOy91c2Vycy90b25namlhbmJvL2dpdGh1Yi9jeGhs
+				L2N4aGwAAOQAAAD+////AQAAAAAAAAASAAAABBAAAEQA
+				AAAAAAAABRAAALAAAAAAAAAAEBAAANwAAAAAAAAAQBAA
+				AMwAAAAAAAAAVRAAAAQBAAAAAAAAVhAAAPwAAAAAAAAA
+				AiAAAMQBAAAAAAAABSAAACgBAAAAAAAAECAAAEQBAAAA
+				AAAAESAAAHgBAAAAAAAAEiAAAFgBAAAAAAAAEyAAAGgB
+				AAAAAAAAICAAAKQBAAAAAAAAMCAAAPwAAAAAAAAAAcAA
+				ABABAAAAAAAAEcAAABQAAAAAAAAAEsAAABwBAAAAAAAA
+				gPAAANABAAAAAAAA
+				</data>
+				<key>FileURL</key>
+				<string>file://localhost/Users/TongJianbo/GitHub/cxhl/cxhl/</string>
+				<key>RelativePath</key>
+				<string>./cxhl</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>cxhl</string>
+			<key>ItemType</key>
+			<string>FolderReference</string>
+		</dict>
+	</dict>
+	<key>com.barebones.DocumentFormatVersion</key>
+	<integer>5</integer>
+	<key>com.barebones.DocumentType</key>
+	<string>Project</string>
+</dict>
+</plist>

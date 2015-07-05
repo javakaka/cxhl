@@ -103,17 +103,32 @@ public class UserAddressService extends Service{
 	 * @Title: queryPage
 	 * @return Page
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(value="jdbcTransactionManager",readOnly = true)
 	public Page queryPage() {
 		Page page = null;
 		Pageable pageable = (Pageable) row.get("pageable");
-		sql = "select * from cxhl_receive_address where 1=1 ";
+		sql = "select * from ("
+		+" select a.*,b.telephone,b.`name` as username, "
+		+" cp.`name` as province_name,cc.`name` as city_name,ccz.`name` as region_name " 
+		+" from cxhl_receive_address a "
+		+" left join cxhl_users b on a.user_id=b.id "
+		+" left join common_province cp on a.province_id=cp.id "
+		+" left join common_city cc on a.city_id=cc.id "
+		+" left join common_city_zone ccz on a.region_id=ccz.id "
+		+" ) as tab where 1=1";
 		String restrictions = addRestrictions(pageable);
 		String orders = addOrders(pageable);
 		sql += restrictions;
 		sql += orders;
-		String countSql = "select count(*) from cxhl_receive_address where 1=1 ";
+		String countSql ="select count(*) from ("
+				+" select a.*,b.telephone,b.`name` as username, "
+				+" cp.`name` as province_name,cc.`name` as city_name,ccz.`name` as region_name " 
+				+" from cxhl_receive_address a "
+				+" left join cxhl_users b on a.user_id=b.id "
+				+" left join common_province cp on a.province_id=cp.id "
+				+" left join common_city cc on a.city_id=cc.id "
+				+" left join common_city_zone ccz on a.region_id=ccz.id "
+				+" ) as tab where 1=1";
 		countSql += restrictions;
 		countSql += orders;
 		long total = count(countSql);
@@ -124,38 +139,6 @@ public class UserAddressService extends Service{
 		int startPos = (pageable.getPageNumber() - 1) * pageable.getPageSize();
 		sql += " limit " + startPos + " , " + pageable.getPageSize();
 		dataSet = queryDataSet(sql);
-		if(dataSet != null && dataSet.size()>0)
-		{
-			for(int i=0; i<dataSet.size(); i++)
-			{
-				Row temp =(Row)dataSet.get(i);
-				String name =temp.getString("name","");
-				String bank_card_no =temp.getString("bank_card_no","");
-				String credit_card_no =temp.getString("credit_card_no","");
-				try {
-					if(! StringUtils.isEmptyOrNull(name))
-					{
-						name =AesUtil.decode(name);
-					}
-					if(! StringUtils.isEmptyOrNull(bank_card_no))
-					{
-						bank_card_no =AesUtil.decode(bank_card_no);
-					}
-					if(! StringUtils.isEmptyOrNull(credit_card_no))
-					{
-						credit_card_no =AesUtil.decode(credit_card_no);
-					}
-				} catch (Exception e) {
-					name="";
-					bank_card_no="";
-					credit_card_no="";
-				}
-				temp.put("name", name);
-				temp.put("bank_card_no", bank_card_no);
-				temp.put("credit_card_no", credit_card_no);
-				dataSet.set(i, temp);
-			}
-		}
 		page = new Page(dataSet, total, pageable);
 		return page;
 	}

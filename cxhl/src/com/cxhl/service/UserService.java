@@ -150,7 +150,6 @@ public class UserService extends Service{
 	 * @Title: queryPage
 	 * @return Page
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(value="jdbcTransactionManager",readOnly = true)
 	public Page queryPage() {
 		Page page = null;
@@ -171,38 +170,6 @@ public class UserService extends Service{
 		int startPos = (pageable.getPageNumber() - 1) * pageable.getPageSize();
 		sql += " limit " + startPos + " , " + pageable.getPageSize();
 		dataSet = queryDataSet(sql);
-		if(dataSet != null && dataSet.size()>0)
-		{
-			for(int i=0; i<dataSet.size(); i++)
-			{
-				Row temp =(Row)dataSet.get(i);
-				String name =temp.getString("name","");
-				String bank_card_no =temp.getString("bank_card_no","");
-				String credit_card_no =temp.getString("credit_card_no","");
-				try {
-					if(! StringUtils.isEmptyOrNull(name))
-					{
-						name =AesUtil.decode(name);
-					}
-					if(! StringUtils.isEmptyOrNull(bank_card_no))
-					{
-						bank_card_no =AesUtil.decode(bank_card_no);
-					}
-					if(! StringUtils.isEmptyOrNull(credit_card_no))
-					{
-						credit_card_no =AesUtil.decode(credit_card_no);
-					}
-				} catch (Exception e) {
-					name="";
-					bank_card_no="";
-					credit_card_no="";
-				}
-				temp.put("name", name);
-				temp.put("bank_card_no", bank_card_no);
-				temp.put("credit_card_no", credit_card_no);
-				dataSet.set(i, temp);
-			}
-		}
 		page = new Page(dataSet, total, pageable);
 		return page;
 	}
@@ -361,6 +328,34 @@ public class UserService extends Service{
 	}
 	
 	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public boolean isUserNameExisted(String user_name)
+	{
+		boolean bool =true;
+		String sql ="select count(*) from cxhl_users where username ='"+user_name+"'";
+		String count =queryField(sql);
+		int sum =Integer.parseInt(count);
+		if(sum >0)
+			bool =false;
+		else
+			bool =true;
+		return bool;
+	}
+	
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public boolean isExtraUserNameExisted(String id, String user_name)
+	{
+		boolean bool =true;
+		String sql ="select count(*) from cxhl_users where username ='"+user_name+"' and id !='"+id+"'";
+		String count =queryField(sql);
+		int sum =Integer.parseInt(count);
+		if(sum >0)
+			bool =false;
+		else
+			bool =true;
+		return bool;
+	}
+	
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
 	public boolean isEmailExisted(String email)
 	{
 		boolean bool =true;
@@ -371,6 +366,20 @@ public class UserService extends Service{
 			bool =false;
 		else
 			bool =true;
+		return bool;
+	}
+	
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public boolean isInviteCodeExisted(String INVITE_CODE)
+	{
+		boolean bool =true;
+		String sql ="select count(*) from cxhl_users where user_code ='"+INVITE_CODE+"'";
+		String count =queryField(sql);
+		int sum =Integer.parseInt(count);
+		if(sum >0)
+			bool =true;
+		else
+			bool =false;
 		return bool;
 	}
 	

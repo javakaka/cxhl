@@ -12,7 +12,6 @@ import com.ezcloud.framework.common.Setting;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.Service;
-import com.ezcloud.framework.util.AesUtil;
 import com.ezcloud.framework.util.SettingUtils;
 import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.DataSet;
@@ -92,17 +91,30 @@ public class UserGiftService extends Service{
 	 * @Title: queryPage
 	 * @return Page
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(value="jdbcTransactionManager",readOnly = true)
 	public Page queryPage() {
 		Page page = null;
 		Pageable pageable = (Pageable) row.get("pageable");
-		sql = "select * from cxhl_user_gift where 1=1 ";
+		sql ="select * from "
+		+" ( "
+		+" select a.*,b.`name` as gift_name ,b.address,c.c_name as shop_name,d.telephone,d.`name` as username "
+		+" from cxhl_user_gift a  "
+		+" left join cxhl_gift b on a.gift_id=b.id "
+		+" left join cxhl_shop c on b.shop_id=c.id "
+		+" left join cxhl_users d on a.user_id=d.id "
+		+" ) as tab  where 1=1 ";
 		String restrictions = addRestrictions(pageable);
 		String orders = addOrders(pageable);
 		sql += restrictions;
 		sql += orders;
-		String countSql = "select count(*) from cxhl_user_gift where 1=1 ";
+		String countSql ="select count(*) from "
+				+" ( "
+				+" select a.*,b.`name` as gift_name ,b.address,c.c_name as shop_name,d.telephone,d.`name` as username "
+				+" from cxhl_user_gift a  "
+				+" left join cxhl_gift b on a.gift_id=b.id "
+				+" left join cxhl_shop c on b.shop_id=c.id "
+				+" left join cxhl_users d on a.user_id=d.id "
+				+" ) as tab  where 1=1 ";
 		countSql += restrictions;
 		countSql += orders;
 		long total = count(countSql);
@@ -113,38 +125,6 @@ public class UserGiftService extends Service{
 		int startPos = (pageable.getPageNumber() - 1) * pageable.getPageSize();
 		sql += " limit " + startPos + " , " + pageable.getPageSize();
 		dataSet = queryDataSet(sql);
-		if(dataSet != null && dataSet.size()>0)
-		{
-			for(int i=0; i<dataSet.size(); i++)
-			{
-				Row temp =(Row)dataSet.get(i);
-				String name =temp.getString("name","");
-				String bank_card_no =temp.getString("bank_card_no","");
-				String credit_card_no =temp.getString("credit_card_no","");
-				try {
-					if(! StringUtils.isEmptyOrNull(name))
-					{
-						name =AesUtil.decode(name);
-					}
-					if(! StringUtils.isEmptyOrNull(bank_card_no))
-					{
-						bank_card_no =AesUtil.decode(bank_card_no);
-					}
-					if(! StringUtils.isEmptyOrNull(credit_card_no))
-					{
-						credit_card_no =AesUtil.decode(credit_card_no);
-					}
-				} catch (Exception e) {
-					name="";
-					bank_card_no="";
-					credit_card_no="";
-				}
-				temp.put("name", name);
-				temp.put("bank_card_no", bank_card_no);
-				temp.put("credit_card_no", credit_card_no);
-				dataSet.set(i, temp);
-			}
-		}
 		page = new Page(dataSet, total, pageable);
 		return page;
 	}

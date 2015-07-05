@@ -13,59 +13,49 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cxhl.service.ShopCouponService;
+import com.cxhl.service.UserCouponService;
 import com.cxhl.service.UserService;
 import com.ezcloud.framework.controller.BaseController;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
-import com.ezcloud.framework.util.AesUtil;
 import com.ezcloud.framework.util.MapUtils;
 import com.ezcloud.framework.util.Md5Util;
 import com.ezcloud.framework.util.Message;
 import com.ezcloud.framework.util.StringUtils;
-import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
 import com.ezcloud.utility.DateUtil;
 import com.ezcloud.utility.StringUtil;
 
-@Controller("cxhlPlatformUserController")
-@RequestMapping("/cxhlpage/platform/member/profile")
-public class UserContrller  extends BaseController{
+@Controller("cxhlPlatformUserCouponController")
+@RequestMapping("/cxhlpage/platform/member/coupon")
+public class UserCouponContrller  extends BaseController{
 
 	@Resource(name = "cxhlUserService")
 	private UserService userService;
 	
+	@Resource(name = "cxhlShopCouponService")
+	private ShopCouponService shopCouponService;
+	
+	@Resource(name = "cxhlUserCouponService")
+	private UserCouponService userCouponService;
 	
 	/**
-	 * 分页查询用户
+	 * 分页查询
 	 * @param pageable
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/list")
 	public String list(Pageable pageable, ModelMap model) {
-		userService.getRow().put("pageable", pageable);
-		Page page = userService.queryPage();
+		userCouponService.getRow().put("pageable", pageable);
+		Page page = userCouponService.queryPage();
 		model.addAttribute("page", page);
 		userService.getRow().clear();
-		return "/cxhlpage/platform/member/profile/list";
-	}
-	/**
-	 * 查询最近注册的5个用户
-	 * @param pageable
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/LatestUserList")
-	public String queryLatestUserList(Pageable pageable, ModelMap model) {
-		userService.getRow().put("pageable", pageable);
-		DataSet data = userService.queryLatestTop5Users();
-		model.addAttribute("data", data);
-		userService.getRow().clear();
-		return "/cxhlpage/platform/webpart/LatestUserList";
+		return "/cxhlpage/platform/member/coupon/list";
 	}
 	
 	/**
-	 * 分页查询房东租客用户
 	 * @param pageable
 	 * @param model
 	 * @return
@@ -81,12 +71,12 @@ public class UserContrller  extends BaseController{
 		}
 		model.addAttribute("id", id);
 		userService.getRow().clear();
-		return "/cxhlpage/platform/member/profile/SelectUser";
+		return "/cxhlpage/platform/member/coupon/SelectUser";
 	}
 
 	@RequestMapping(value = "/add")
 	public String add(ModelMap model) {
-		return "/cxhlpage/platform/member/profile/add";
+		return "/cxhlpage/platform/member/coupon/add";
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -140,7 +130,7 @@ public class UserContrller  extends BaseController{
 		Assert.notNull(id);
 		Row userRow =userService.find(String.valueOf(id));
 		model.addAttribute("row", userRow);
-		return "/cxhlpage/platform/member/profile/edit";
+		return "/cxhlpage/platform/member/coupon/edit";
 	}
 
 	@RequestMapping(value = "/update")

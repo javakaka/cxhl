@@ -83,21 +83,33 @@ public class UserCollectionService extends Service{
 	
 	/**
 	 * 分页查询
-	 * 
 	 * @Title: queryPage
 	 * @return Page
 	 */
-	@SuppressWarnings("unchecked")
 	@Transactional(value="jdbcTransactionManager",readOnly = true)
 	public Page queryPage() {
 		Page page = null;
 		Pageable pageable = (Pageable) row.get("pageable");
-		sql = "select * from cxhl_user_collection where 1=1 ";
+		sql = "select * from "
+		+" ( "
+		+" select a.* ,b.c_name as collection_name,c.telephone,c.`name` as username "
+		+" from cxhl_user_collection a "
+		+" left join cxhl_shop b on a.c_id=b.id "
+		+" left join cxhl_users c on a.user_id=c.id "
+		+" where a.c_type='0' "
+		+" ) as tab  where 1=1 ";
 		String restrictions = addRestrictions(pageable);
 		String orders = addOrders(pageable);
 		sql += restrictions;
 		sql += orders;
-		String countSql = "select count(*) from cxhl_user_collection where 1=1 ";
+		String countSql = "select count(*) from "
+				+" ( "
+				+" select a.* ,b.c_name as collection_name,c.telephone,c.`name` as username "
+				+" from cxhl_user_collection a "
+				+" left join cxhl_shop b on a.c_id=b.id "
+				+" left join cxhl_users c on a.user_id=c.id "
+				+" where a.c_type='0' "
+				+" ) as tab  where 1=1 ";
 		countSql += restrictions;
 		countSql += orders;
 		long total = count(countSql);
@@ -108,38 +120,6 @@ public class UserCollectionService extends Service{
 		int startPos = (pageable.getPageNumber() - 1) * pageable.getPageSize();
 		sql += " limit " + startPos + " , " + pageable.getPageSize();
 		dataSet = queryDataSet(sql);
-		if(dataSet != null && dataSet.size()>0)
-		{
-			for(int i=0; i<dataSet.size(); i++)
-			{
-				Row temp =(Row)dataSet.get(i);
-				String name =temp.getString("name","");
-				String bank_card_no =temp.getString("bank_card_no","");
-				String credit_card_no =temp.getString("credit_card_no","");
-				try {
-					if(! StringUtils.isEmptyOrNull(name))
-					{
-						name =AesUtil.decode(name);
-					}
-					if(! StringUtils.isEmptyOrNull(bank_card_no))
-					{
-						bank_card_no =AesUtil.decode(bank_card_no);
-					}
-					if(! StringUtils.isEmptyOrNull(credit_card_no))
-					{
-						credit_card_no =AesUtil.decode(credit_card_no);
-					}
-				} catch (Exception e) {
-					name="";
-					bank_card_no="";
-					credit_card_no="";
-				}
-				temp.put("name", name);
-				temp.put("bank_card_no", bank_card_no);
-				temp.put("credit_card_no", credit_card_no);
-				dataSet.set(i, temp);
-			}
-		}
 		page = new Page(dataSet, total, pageable);
 		return page;
 	}
