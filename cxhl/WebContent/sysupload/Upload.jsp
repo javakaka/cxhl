@@ -178,7 +178,6 @@ if(callback == null || callback.equals(""))
 			upload_times +=1;
 			if(callback !="" && upload_times >1)
 			{
-				//alert(window.opener);
 				window.opener.<%=callback%>();
 			}
 		}

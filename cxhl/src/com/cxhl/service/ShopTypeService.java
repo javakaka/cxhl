@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.ezcloud.framework.common.Setting;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.Service;
+import com.ezcloud.framework.util.SettingUtils;
 import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
@@ -124,6 +126,8 @@ public class ShopTypeService extends Service{
 				+" left join file_attach_upload c on b.CONTROL_ID=c.CONTROL_ID "
 				+" order by a.level_index ";
 		ds =queryDataSet(sSql);
+		Setting setting =SettingUtils.get();
+		String site_url =setting.getSiteUrl();
 		if(ds != null && ds.size() >0 )
 		{
 			for(int i=0;i<ds.size(); i++)
@@ -137,6 +141,7 @@ public class ShopTypeService extends Service{
 					if(iPos != -1)
 					{
 						file_path =file_path.substring(iPos);
+						file_path =site_url+"/"+file_path;
 					}
 				}
 				else

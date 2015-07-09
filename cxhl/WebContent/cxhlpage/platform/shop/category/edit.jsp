@@ -19,30 +19,86 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<%=basePath%>/res/js/datePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 $().ready(function() {
+
 	var $inputForm = $("#inputForm");
-	
-	${flash_message}
-	// 表单验证
-	$inputForm.validate({
-		rules: {
-			ID: "required",
-			NAME: {
-				required: "required",
-				/** remote: {
-					url: "<%=basePath%>cxhlpage/platform/member/profile/check_telephone.do",
-					cache: false
-				}
-				*/
-			},
-			LEVEL_INDEX: false
-		},
-		messages:{
-			NAME:{
-				required: "名称不能为空",
-				remote: ""
-			}
+	var $submitBtn = $("#submitBtn");
+	$submitBtn.click( function() {
+		var isValid =checkForm();
+		if(isValid)
+		{
+			submit();
 		}
+		return false;
 	});
+	//[@flash_message /]
+	var NAME ="";
+	var ID ="";
+	function checkForm()
+	{
+		NAME =$("#NAME").val();
+		ID =$("#ID").val();
+		if(typeof ID == "undefined" || ID == "")
+		{
+			$.message("error","ID不能为空");
+			$("#ID").focus();
+			return false;
+		}
+		if(typeof NAME == "undefined" || NAME == "")
+		{
+			$.message("error","名称不能为空");
+			$("#NAME").focus();
+			return false;
+		}
+		return true;
+	}
+
+	function submit()
+	{
+		//alert('submit');
+		/**/
+		var NAME =$("#NAME").val();
+		var ID =$("#ID").val();
+		var LEVEL_INDEX =$("#LEVEL_INDEX").val();
+		if(typeof LEVEL_INDEX == "undefined" || LEVEL_INDEX == "")
+		{
+			LEVEL_INDEX ="";
+		}
+		//REMARK =$("#editor").val();
+		//alert(REMARK);
+		var params={ID: ID,NAME: NAME,LEVEL_INDEX: LEVEL_INDEX}
+		$.ajax({
+				url: "<%=basePath%>cxhlpage/platform/shop/category/save.do",
+				type: "POST",
+				data: params,
+				dataType: "json",
+				cache: false,
+				beforeSend: function (XMLHttpRequest){
+					//alert('.....');
+				},
+				success: function(ovo, textStatus) {
+					var code =ovo.code;
+					if(code >=0)
+					{
+						var v_id =ovo.oForm.ID;
+						$("#ID").val(v_id);
+						window.parent.enableTab("detail","detail.jsp?id="+v_id);
+						window.parent.changeTabUrl("base","edit.do?id="+v_id);
+					}
+					else
+					{
+						$.message("error",ovo.msg);
+					}
+				},
+				complete: function (XMLHttpRequest, textStatus){
+					//alert("complete...");
+				},
+				error: function (){
+					alert('error...');
+				}
+			});
+			
+		//window.parent.enableTab("detail","detail.jsp?id=1");
+	}
 	
 });
 </script>
@@ -58,8 +114,8 @@ $().ready(function() {
 					<span class="requiredField">*</span>分类名称:
 				</th>
 				<td>
-					<input type="text" name="NAME" class="text" maxlength="200" value="${row.NAME }" />
-					<input type="hidden" name="ID" class="text" maxlength="200" value="${row.ID }" />
+					<input type="text" id="NAME" name="NAME" class="text" maxlength="200" value="${row.NAME }" />
+					<input type="hidden" id="ID" name="ID" class="text" maxlength="200" value="${row.ID }" />
 				</td>
 			</tr>
 			<tr>
@@ -67,7 +123,7 @@ $().ready(function() {
 					排序:
 				</th>
 				<td>
-					<input type="text" name="LEVEL_INDEX" class="text" maxlength="200" value="${row.LEVEL_INDEX }" />
+					<input type="text" id="LEVEL_INDEX" name="LEVEL_INDEX" class="text" maxlength="200" value="${row.LEVEL_INDEX }" />
 				</td>
 			</tr>
 			<tr>
@@ -75,8 +131,8 @@ $().ready(function() {
 					&nbsp;
 				</th>
 				<td>
-					<input type="submit" class="button" value="<cc:message key="admin.common.submit" />" />
-					<input type="button" id="backButton" class="button" value="<cc:message key="admin.common.back" />" />
+					<input type="submit" id="submitBtn" class="button" value="<cc:message key="admin.common.submit" />" />
+					<input type="button" id="backBtn" class="button" value="返回" onclick="javascript:window.parent.location.href='list.do'"/>
 				</td>
 			</tr>
 		</table>

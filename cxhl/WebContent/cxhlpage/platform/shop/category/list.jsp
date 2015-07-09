@@ -224,7 +224,7 @@ $().ready(function() {
 						<span title="${row.CREATE_TIME}">${row.CREATE_TIME}</span>
 					</td>
 					<td>
-						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
+						<a href="edit_tab.jsp?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
 					<!--
 						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>-->
 						<!--<a href="#" target="_blank"><cc:message key="admin.common.view" /></a>-->

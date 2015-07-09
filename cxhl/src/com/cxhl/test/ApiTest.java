@@ -929,8 +929,8 @@ public class ApiTest {
 	//查询商家分类
 	public static void queryShopType()
 	{
-//		String url ="http://localhost:8080/cxhl/api/shop/category/list.do";
-		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/category/list.do";
+		String url ="http://localhost:8080/cxhl/api/shop/category/list.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/category/list.do";
 		IVO ivo =new IVO();
 		try {
 			String json =  VOConvert.ivoToJson(ivo);
@@ -1476,7 +1476,7 @@ public class ApiTest {
 //		用户批量删除收藏
 //		userDeleteCollection();
 //		查询商家分类
-//		queryShopType();
+		queryShopType();
 //		分页查询商家分类
 //		queryShopPage();
 //		查询商家详情
@@ -1510,7 +1510,7 @@ public class ApiTest {
 //		微信app支付
 //		weixinAppPay();
 //		模拟调用统一支付接口
-		monitorS2WX();
+//		monitorS2WX();
 		System.out.println("\n==========request  end=============");
 	}
 	

@@ -20,6 +20,7 @@ import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.util.MapUtils;
 import com.ezcloud.framework.util.Message;
+import com.ezcloud.framework.util.ResponseVO;
 import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.Row;
 
@@ -55,11 +56,22 @@ public class ShopCategoryContrller  extends BaseController{
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(@RequestParam HashMap<String,String> map,RedirectAttributes redirectAttributes) throws Exception {
+	public @ResponseBody 
+	ResponseVO save(@RequestParam HashMap<String,String> map,RedirectAttributes redirectAttributes) throws Exception {
 		Row row =MapUtils.convertMaptoRowWithoutNullField(map);
-		shopTypeService.insert(row);
-		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
-		return "redirect:list.do";
+		String id=row.getString("id","");
+		if( StringUtils.isEmptyOrNull(id))
+		{
+			shopTypeService.insert(row);
+		}
+		else
+		{
+			shopTypeService.update(row);
+		}
+		id =row.getString("id");
+		ResponseVO ovo =new ResponseVO(0,"保存成功");
+		ovo.put("id", id);
+		return ovo;
 	}
 
 	@RequestMapping(value = "/edit")
