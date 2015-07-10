@@ -54,16 +54,16 @@ public class ApiTest {
 	//发送短信验证码
 	public static void sendSms()
 	{
-//		String url ="http://localhost:8080/cxhl/api/sms/send.do";
-		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/sms/send.do";
+		String url ="http://localhost:8080/cxhl/api/sms/send.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/sms/send.do";
 		IVO ivo =new IVO();
 		   try {
 			   //手机号
 				ivo.set("telephone", "13826531136");
-				ivo.set("telephone", "13826531137");
-				ivo.set("telephone", "13590856852");
+//				ivo.set("telephone", "13826531137");
+//				ivo.set("telephone", "13590856852");
 				//1 发送短信 0不发送短信
-				ivo.set("type", "0");
+//				ivo.set("type", "0");
 //				ivo.set("type", "1");
 				String json =  VOConvert.ivoToJson(ivo);
 				System.out.println("\n 加密前 ivo to json ====>>"+json);
@@ -222,16 +222,17 @@ public class ApiTest {
 	//注册
 	public static void register()
 	{
-//		String url ="http://localhost:8080/cxhl/api/user/register.do";
-		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/register.do";
+		String url ="http://localhost:8080/cxhl/api/user/register.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/register.do";
 		IVO ivo =new IVO();
 	   try {
 			ivo.set("telephone", "13826531136");
-			ivo.set("telephone", "13826531137");
+//			ivo.set("telephone", "13826531137");
 			ivo.set("password", "E10ADC3949BA59ABBE56E057F20F883E");
-			ivo.set("sms_code", "993597");
+			ivo.set("sms_code", "158835");
+//			ivo.set("sms_code", "15883523");
 			ivo.set("device", "1");
-			ivo.set("device_code", "1235173571357562312");
+			ivo.set("device_code", "1212312735713575663");
 //			ivo.set("invite_code", "123456");
 			//客户端版本
 			ivo.set("version", "1.0");
@@ -1429,7 +1430,7 @@ public class ApiTest {
 //		发送短信验证码
 //		sendSms();
 //		注册
-//		register();
+		register();
 //		登陆
 //		login();
 //		注销
@@ -1476,7 +1477,7 @@ public class ApiTest {
 //		用户批量删除收藏
 //		userDeleteCollection();
 //		查询商家分类
-		queryShopType();
+//		queryShopType();
 //		分页查询商家分类
 //		queryShopPage();
 //		查询商家详情

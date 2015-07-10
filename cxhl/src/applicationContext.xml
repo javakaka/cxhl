@@ -9,6 +9,7 @@
 	default-lazy-init="true">
 	<import resource="applicationContext-jpa.xml" />
 	<import resource="applicationContext-jdbc.xml" />
-	<!-- 加载网银+的配置文件 -->
+	<!-- 加载网银+的配置文件 
 	<import resource="META-INF/spring/spring-config.xml" />
+	-->
 </beans>
