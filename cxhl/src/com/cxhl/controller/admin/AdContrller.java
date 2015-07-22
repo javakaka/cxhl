@@ -23,10 +23,10 @@ import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.Row;
 
 @Controller("fzbPlatformAdController")
-@RequestMapping("/fzbpage/platform/ad")
+@RequestMapping("/cxhlpage/platform/ad")
 public class AdContrller  extends BaseController{
 
-	@Resource(name = "fzbAdService")
+	@Resource(name = "cxhlAdService")
 	private AdService adService;
 	
 	/**
@@ -35,12 +35,12 @@ public class AdContrller  extends BaseController{
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/AdList")
+	@RequestMapping(value = "/list")
 	public String list(Pageable pageable, ModelMap model) {
 		Page page = adService.queryPage(pageable);
 		model.addAttribute("page", page);
 		adService.getRow().clear();
-		return "/fzbpage/platform/ad/AdList";
+		return "/cxhlpage/platform/ad/list";
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class AdContrller  extends BaseController{
 	
 	@RequestMapping(value = "/add")
 	public String add(ModelMap model) {
-		return "/fzbpage/platform/ad/add";
+		return "/cxhlpage/platform/ad/add";
 	}	
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -91,14 +91,14 @@ public class AdContrller  extends BaseController{
 //		row.put("content", content);
 		adService.insert(row);
 		addFlashMessage(redirectAttributes, Message.success("添加成功"));
-		return "redirect:AdList.do";
+		return "redirect:list.do";
 	}
 
 	@RequestMapping(value = "/edit")
 	public String edit(String id, ModelMap model) {
 		Assert.notNull(id);
 		model.addAttribute("row", adService.findById(id));
-		return "/fzbpage/platform/ad/edit";
+		return "/cxhlpage/platform/ad/edit";
 	}
 
 	@RequestMapping(value = "/update")
@@ -109,7 +109,7 @@ public class AdContrller  extends BaseController{
 //		adRow.put("content", content);
 		adService.update(adRow);
 		addFlashMessage(redirectAttributes,SUCCESS_MESSAGE);
-		return "redirect:AdList.do";
+		return "redirect:list.do";
 	}
 
 	@RequestMapping(value = "/delete")

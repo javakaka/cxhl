@@ -41,6 +41,19 @@ public class ShopGiftService extends Service{
 		return row;
 	}
 	
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public Row findDetail(String id)
+	{
+		Row row =null;
+		String sSql ="select a.* ,fu.FILE_PATH "
+		+" from cxhl_gift a   "
+		+" left join file_attach_control fc on fc.DEAL_CODE=a.id and fc.DEAL_TYPE='gift_icon' "
+		+" left join file_attach_upload fu on fc.CONTROL_ID=fu.CONTROL_ID  "
+		+" where 1=1 and a.id='1'"; 
+		row =queryRow(sSql);
+		return row;
+	}
+	
 	@Transactional(value="jdbcTransactionManager",propagation=Propagation.REQUIRED)
 	public int insert(Row row)
 	{

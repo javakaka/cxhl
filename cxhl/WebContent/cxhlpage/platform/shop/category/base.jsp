@@ -124,7 +124,7 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="button" id="submitBtn" class="button" value="<cc:message key="admin.common.submit" />" />
-					<input type="button" id="backBtn" class="button" value="返回" onclick="javascript:window.history.go('list.do')"/>
+					<input type="button" id="backBtn" class="button" value="返回" onclick="javascript:window.parent.location.href='list.do'"/>
 				</td>
 			</tr>
 		</table>

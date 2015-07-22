@@ -62,7 +62,7 @@ public class AdService extends Service {
 	{
 		DataSet ds =new DataSet();
 		String now_time =DateUtil.getCurrentDateTime();
-		sql ="select id,name,picture,width,height from cxhl_ad where status=1 and (start_time<='"+now_time+"' and end_time>='"+now_time+"')";
+		sql ="select id,name,picture,width,height,position from cxhl_ad where status=1 and (start_time<='"+now_time+"' and end_time>='"+now_time+"')";
 		ds =queryDataSet(sql);
 		return ds;
 		

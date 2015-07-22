@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>房源列表</title>
+<title>抽奖优惠券列表</title>
 <link href="<%=basePath%>/res/admin/css/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/common.js"></script>
@@ -106,11 +106,10 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		房东委托 &raquo;房源列表
+		抽奖管理 &raquo;抽奖优惠券列表
 		<span><cc:message key="admin.page.total" args="${page.total}"/></span>
 	</div>
-	<form id="listForm" action="RoomList.do" method="get">
-		<input type="hidden" id="room_status" name="room_status" value="<c:if test="${room_status !=''}">${room_status}</c:if>" />
+	<form id="listForm" action="list.do" method="get">
 		<div class="bar">
 			<a href="add.do" class="iconButton">
 				<span class="addIcon">&nbsp;</span><cc:message key="admin.common.add" />
@@ -122,6 +121,7 @@ $().ready(function() {
 				<a href="javascript:;" id="refreshButton" class="iconButton">
 					<span class="refreshIcon">&nbsp;</span><cc:message key="admin.common.refresh" />
 				</a>
+				<!-- 
 				<div class="menuWrap">
 					<a href="javascript:;" id="filterSelect" class="button">
 						筛选<span class="arrow">&nbsp;</span>
@@ -146,6 +146,7 @@ $().ready(function() {
 						</ul>
 					</div>
 				</div>
+				-->
 				<div class="menuWrap">
 					<a href="javascript:;" id="pageSizeSelect" class="button">
 						<cc:message key="admin.page.pageSize" /><span class="arrow">&nbsp;</span>
@@ -177,10 +178,10 @@ $().ready(function() {
 				<div class="popupMenu">
 					<ul id="searchPropertyOption">
 						<li>
-							<a href="javascript:;" <c:if test="${page.searchProperty == 'CODE'}"> class="current"</c:if> val="CODE">唯一码</a>
+							<a href="javascript:;" <c:if test="${page.searchProperty == 'NAME'}"> class="current"</c:if> val="NAME">优惠券名称</a>
 						</li>
 						<li>
-							<a href="javascript:;" <c:if test="${page.searchProperty == 'INVITE_CODE'}">class="current"</c:if> val="INVITE_CODE">邀请码</a>
+							<a href="javascript:;" <c:if test="${page.searchProperty == 'SHOP_NAME'}">class="current"</c:if> val="SHOP_NAME">商家名称</a>
 						</li>
 					</ul>
 				</div>
@@ -192,56 +193,31 @@ $().ready(function() {
 					<input type="checkbox" id="selectAll" />
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="telephone">房东手机号</a>
+					<a href="javascript:;" class="sort" name="NAME">优惠券名称</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="CODE">唯一码</a>
+					<a href="javascript:;" class="sort" name="SHOP_NAME">商家名称</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="PROVINCE">省份</a>
+					<a href="javascript:;" class="sort" name="LOTTERY_NUM">总数量</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="CITY">城市</a>
+					<a href="javascript:;" class="sort" name="LEFT_NUM">剩余数量</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="REGION">区域</a>
+					<a href="javascript:;" class="sort" name="YEAR">年份</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="AREA">面积</a>
+					<a href="javascript:;" class="sort" name="MONTH">月份</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="MONTHLY_RENT">月租</a>
+					<a href="javascript:;" class="sort" name="DAY">天</a>
 				</th>
+				<!-- 
 				<th>
-					<a href="javascript:;" class="sort" name="DEPOSIT">押金</a>
+					<a href="javascript:;" class="sort" name="WEEK">周</a>
 				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="WATER_NUM">水表读数</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="ELECTRICITY_NUM">电表读数</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="GAS_NUM">燃气读数</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="PROPERTY">物业管理费</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="PAY_DAY">收款日</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="INVITE_CODE">邀请码</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="STATUS">状态</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="START_DATE">开始日期</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="END_DATE">结束日期</a>
-				</th>
+				-->
 				<th>
 					<span><cc:message key="admin.common.handle" /></span>
 				</th>
@@ -252,76 +228,35 @@ $().ready(function() {
 						<input type="checkbox" name="ids" value="${row.ID}" />
 					</td>
 					<td>
-						<span title="${row.LANDLORD_NAME}">${row.TELEPHONE}</span>
+						<span title="${row.NAME}">${row.NAME}</span>
 					</td>
 					<td>
-						<span title="${row.CODE}">${row.CODE}</span>
+						<span title="${row.SHOP_NAME}">${row.SHOP_NAME}</span>
 					</td>
 					<td>
-						<span title="${row.CITY_NAME}">${row.PROVINCE_NAME}</span>
+						<span title="${row.LOTTERY_NUM}">${row.LOTTERY_NUM}</span>
 					</td>
 					<td>
-						<span title="${row.CITY_NAME}">${row.CITY_NAME}</span>
+						<span title="${row.LEFT_NUM}">${row.LEFT_NUM}</span>
 					</td>
 					<td>
-						<span title="${row.ZONE_NAME}">${row.ZONE_NAME}</span>
+						<span title="${row.YEAR}">${row.YEAR}</span>
 					</td>
 					<td>
-						${row.AREA}
+						${row.MONTH}
 					</td>
 					<td>
-						${row.MONTHLY_RENT}
+						${row.DAY}
 					</td>
+					<!-- 
 					<td>
-						${row.DEPOSIT}
+						${row.WEEK}
 					</td>
+					-->
 					<td>
-						${row.WATER_NUM}
-					</td>
-					<td>
-						${row.ELECTRICITY_NUM}
-					</td>
-					<td>
-						${row.GAS_NUM}
-					</td>
-					<td>
-						${row.PROPERTY}
-					</td>
-					<td>
-						${row.PAY_DAY}
-					</td>
-					<td>
-						${row.INVITE_CODE}
-					</td>
-					<td>
-						<c:choose>
-							<c:when test="${row.STATUS == 0}">待租</c:when>
-							<c:when test="${row.STATUS == 1}">签约中</c:when>
-							<c:when test="${row.STATUS == 2}">出租中</c:when>
-							<c:when test="${row.STATUS == -2}">结束</c:when>
-							<c:when test="${row.STATUS == -1}">出租中</c:when>
-							<c:when test="${row.STATUS == -3}">结束</c:when>
-							<c:when test="${row.STATUS == -4}">删除</c:when>
-							<c:otherwise>--</c:otherwise>
-						</c:choose>
-					</td>
-					<td>
-						${row.START_DATE}
-					</td>
-					<td>
-						${row.END_DATE}
-					</td>
-					<td>
-						<c:choose>
-							<c:when test="${row.STATUS == 0 || row.STATUS==1}">
-								<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
-							</c:when>
-							<c:otherwise>
-								<a href="javascript:void(0);" onclick="$.message('warn','非待租和签约中状态的房源不能编辑!');return false;" style="color: gray;"><cc:message key="admin.common.edit" /></a>
-							</c:otherwise>
-						</c:choose>
-						<!--<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>-->
-						<!--<a href="#" target="_blank"><cc:message key="admin.common.view" /></a>-->
+						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
+						<!--<a href="info.do?id=${row.ID}">详情</a>
+						<a href="#" target="_blank"><cc:message key="admin.common.view" /></a>-->
 					</td>
 				</tr>
 			</c:forEach>

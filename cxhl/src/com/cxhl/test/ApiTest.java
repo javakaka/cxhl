@@ -54,17 +54,17 @@ public class ApiTest {
 	//发送短信验证码
 	public static void sendSms()
 	{
-		String url ="http://localhost:8080/cxhl/api/sms/send.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/sms/send.do";
+//		String url ="http://localhost:8080/cxhl/api/sms/send.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/sms/send.do";
 		IVO ivo =new IVO();
 		   try {
 			   //手机号
-				ivo.set("telephone", "13826531136");
+				ivo.set("telephone", "13826531131");
 //				ivo.set("telephone", "13826531137");
 //				ivo.set("telephone", "13590856852");
 				//1 发送短信 0不发送短信
 //				ivo.set("type", "0");
-//				ivo.set("type", "1");
+				ivo.set("type", "1");
 				String json =  VOConvert.ivoToJson(ivo);
 				System.out.println("\n 加密前 ivo to json ====>>"+json);
 				//加密
@@ -390,8 +390,8 @@ public class ApiTest {
 	 */
 	public static void queryAllAds()
 	{
-//	String url ="http://ilef.vxg196.10000net.cn/cxhl/api/ad/list.do";
-	String url ="http://localhost:8080/cxhl/api/ad/list.do";
+	String url ="http://ilef.vxg196.10000net.cn/cxhl/api/ad/list.do";
+//	String url ="http://localhost:8080/cxhl/api/ad/list.do";
 	IVO ivo =new IVO();
 	try {
 			String json =  VOConvert.ivoToJson(ivo);
@@ -404,7 +404,8 @@ public class ApiTest {
 			System.out.print(res);
 			res = AesUtil.decode(res);
 			System.out.println("\n decode response json ===========>>\n"+res);
-	   } catch (JException e) {
+	   } 
+		catch (JException e) {
 			e.printStackTrace();
 		}
 	   catch (Exception e) {
@@ -760,6 +761,7 @@ public class ApiTest {
 				e.printStackTrace();
 			}
 	}
+	
 	//更换手机号码
 	public static void changeTelephone()
 	{
@@ -850,11 +852,12 @@ public class ApiTest {
 	//分页查询用户收藏
 	public static void queryPageUserCollection()
 	{
-		String url ="http://localhost:8080/cxhl/api/user/collection/list.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/collection/list.do";
+//		String url ="http://localhost:8080/cxhl/api/user/collection/list.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/collection/list.do";
 		IVO ivo =new IVO();
 		try {
 			ivo.set("user_id", "1");
+			ivo.set("user_id", "494");
 			ivo.set("page", "1");
 			ivo.set("page_size", "10");
 			String json =  VOConvert.ivoToJson(ivo);
@@ -955,8 +958,8 @@ public class ApiTest {
 	//分页查询商家分类
 	public static void queryShopPage()
 	{
-		String url ="http://localhost:8080/cxhl/api/shop/profile/list.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/profile/list.do";
+//		String url ="http://localhost:8080/cxhl/api/shop/profile/list.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/profile/list.do";
 		IVO ivo =new IVO();
 		try {
 			ivo.set("type", "1");
@@ -1014,6 +1017,7 @@ public class ApiTest {
 		IVO ivo =new IVO();
 		try {
 			ivo.set("shop_id", "1");
+			ivo.set("shop_id", "19");
 			ivo.set("page", "1");
 			ivo.set("page_size", "1");
 			String json =  VOConvert.ivoToJson(ivo);
@@ -1037,11 +1041,12 @@ public class ApiTest {
 	//分页查询商家优惠券图文详情
 	public static void queryShopCouponRemark()
 	{
-		String url ="http://localhost:8080/cxhl/api/shop/coupon/remark.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/coupon/remark.do";
+//		String url ="http://localhost:8080/cxhl/api/shop/coupon/remark.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/shop/coupon/remark.do";
 		IVO ivo =new IVO();
 		try {
-			ivo.set("id", "1");
+			ivo.set("id", "3");
+			ivo.set("id", "3000");
 			String json =  VOConvert.ivoToJson(ivo);
 			System.out.println("\n 加密前 ivo to json ====>>"+json);
 			//加密
@@ -1148,11 +1153,14 @@ public class ApiTest {
 	//用户查询自己的优惠券
 	public static void queryUserCoupon()
 	{
-		String url ="http://localhost:8080/cxhl/api/user/coupon/list.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/coupon/list.do";
+//		String url ="http://localhost:8080/cxhl/api/user/coupon/list.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/coupon/list.do";
 		IVO ivo =new IVO();
 		try {
 			ivo.set("user_id", "1");
+			ivo.set("user_id", "207");
+			ivo.set("user_id", "493");
+			ivo.set("user_id", "206");
 //			ivo.set("state", "1");
 			ivo.set("page", "1");
 			ivo.set("page_size", "10");
@@ -1291,6 +1299,7 @@ public class ApiTest {
 			e.printStackTrace();
 		}
 	}
+	
 	//用户分页查询自己的礼品
 	public static void queryUserGiftPage()
 	{
@@ -1299,6 +1308,7 @@ public class ApiTest {
 		IVO ivo =new IVO();
 		try {
 			ivo.set("user_id", "1");
+			ivo.set("user_id", "7");
 //			ivo.set("state", "1");
 			ivo.set("page", "1");
 			ivo.set("page_size", "10");
@@ -1320,6 +1330,7 @@ public class ApiTest {
 			e.printStackTrace();
 		}
 	}
+	
 	//用户查询礼品详情
 	public static void queryUserGiftDetail()
 	{
@@ -1346,6 +1357,7 @@ public class ApiTest {
 			e.printStackTrace();
 		}
 	}
+	
 	//用户兑换礼品
 	public static void queryExchangeGift()
 	{
@@ -1403,6 +1415,116 @@ public class ApiTest {
 			e.printStackTrace();
 		}
 	}
+//	用户分享
+	public static void userShare()
+	{
+//		String url ="http://localhost:8080/cxhl/api/user/share/add.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/share/add.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			ivo.set("type", "1");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	优惠券抽奖
+	public static void lotteryCoupon()
+	{
+//		String url ="http://localhost:8080/cxhl/api/user/lottery/coupon.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/lottery/coupon.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			ivo.set("user_id", "493");
+//			ivo.set("user_id", "2");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+//	二维码抽奖
+	public static void lotteryQRCode()
+	{
+		String url ="http://localhost:8080/cxhl/api/user/lottery/qrcode.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/lottery/qrcode.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+//	电台抽奖
+	public static void lotteryRadio()
+	{
+		String url ="http://localhost:8080/cxhl/api/user/lottery/radio.do";
+//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/lottery/radio.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	
 	public static void monitorS2WX()
@@ -1422,6 +1544,62 @@ public class ApiTest {
 		}
 		System.out.print("response====>> \n"+response);
 	}
+	
+	//查询用户的抽奖次数
+	public static void lotteryNum()
+	{
+//		String url ="http://localhost:8080/cxhl/api/user/lottery/lottery_num.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/lottery/lottery_num.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//查询用户的抽奖记录
+	public static void lotteryList()
+	{
+//		String url ="http://localhost:8080/cxhl/api/user/lottery/list.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/lottery/list.do";
+		IVO ivo =new IVO();
+		try {
+			ivo.set("user_id", "1");
+			ivo.set("page", "1");
+			ivo.set("page_size", "10");
+			String json =  VOConvert.ivoToJson(ivo);
+			
+			System.out.println("\n 加密前 ivo to json ====>>"+json);
+			//加密
+			json =AesUtil.encode(json);
+			System.out.println("\n ivo to json ====>>"+json);
+			String res =NetUtil.getNetResponse(url, json,"UTF-8");
+			System.out.println("\n response json ====>> \n");
+			System.out.print(res);
+			res = AesUtil.decode(res);
+			System.out.println("\n decode response json ===========>>\n"+res);
+		} catch (JException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String args[])
 	{
 		System.out.println("\n==========request start=============");
@@ -1430,7 +1608,7 @@ public class ApiTest {
 //		发送短信验证码
 //		sendSms();
 //		注册
-		register();
+//		register();
 //		登陆
 //		login();
 //		注销
@@ -1483,7 +1661,7 @@ public class ApiTest {
 //		查询商家详情
 //		queryShopDetail();
 //		分页查询商家优惠券
-//		queryShopCouponPage();
+		queryShopCouponPage();
 //		分页查询商家优惠券图文详情
 //		queryShopCouponRemark();
 //		创建订单
@@ -1512,6 +1690,18 @@ public class ApiTest {
 //		weixinAppPay();
 //		模拟调用统一支付接口
 //		monitorS2WX();
+//		用户分享
+//		userShare();
+//		优惠券抽奖
+//		lotteryCoupon();
+//		二维码抽奖
+//		lotteryQRCode();
+//		电台抽奖
+//		lotteryRadio();
+//		查询用户的抽奖次数
+//		lotteryNum();
+//		查询用户的抽奖记录
+//		lotteryList();
 		System.out.println("\n==========request  end=============");
 	}
 	

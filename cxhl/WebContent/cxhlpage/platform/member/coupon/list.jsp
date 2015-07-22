@@ -198,6 +198,9 @@ $().ready(function() {
 					<a href="javascript:;" class="sort" name="COUPON_NAME">优惠券名称</a>
 				</th>
 				<th>
+					<a href="javascript:;" class="sort" name="PAY_CODE">消费验证码</a>
+				</th>
+				<th>
 					<a href="javascript:;" class="sort" name="SHOP_NAME">商家名称</a>
 				</th>
 				<th>
@@ -226,6 +229,9 @@ $().ready(function() {
 					</td>
 					<td>
 						<span title="${row.COUPON_NAME}">${row.COUPON_NAME}</span>
+					</td>
+					<td>
+						<span title="${row.PAY_CODE}">${row.PAY_CODE}</span>
 					</td>
 					<td>
 						<span title="${row.SHOP_NAME}">${row.SHOP_NAME}</span>

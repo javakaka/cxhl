@@ -35,7 +35,34 @@ public class Login extends Service {
 		String username = row.getString("username", null);
 		String password = row.getString("password", null);
 		String token = row.getString("token", null);
-		sql = "select * from sm_staff where staff_name='" + username + "'";
+		sql = "select * from sm_staff where staff_name='" + username + "' and is_sys_user='1' ";
+		if(token != null && token.length() >0)
+		{
+			try {
+				token =AesUtil.decode(token);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			sql +=  " and bureau_no='"+token+"'";
+		}
+		Row staff = queryRow(sql);
+		System.out.println("row===>" + row);
+		// 判断密码是否正确
+		if (staff == null) {
+			throw new JException(-1001, "账号不存在");
+		}
+		String md5_pwd = staff.getString("password");
+		if (!password.equals(md5_pwd)) {
+			throw new JException(-1002, "账号或者密码错误!");
+		}
+		row = staff;
+	}
+	public void thirdLogin() throws JException {
+		String username = row.getString("username", null);
+		String password = row.getString("password", null);
+		String rtx_id = row.getString("rtx_id", null);
+		String token = row.getString("token", null);
+		sql = "select * from sm_staff where staff_name='" + username + "' and rtx_id='"+rtx_id+"' ";
 		if(token != null && token.length() >0)
 		{
 			try {

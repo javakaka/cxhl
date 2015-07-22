@@ -155,6 +155,14 @@ public class ShopTypeService extends Service{
 		return ds;
 	}
 	
+	public DataSet querySummaryList()
+	{
+		DataSet ds =new DataSet();
+		String sSql =" select id,name from cxhl_shop_type order by level_index ";
+		ds =queryDataSet(sSql);
+		return ds;
+	}
+	
 	/**
 	 * 删除
 	 * 

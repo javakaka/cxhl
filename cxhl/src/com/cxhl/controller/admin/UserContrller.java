@@ -49,6 +49,7 @@ public class UserContrller  extends BaseController{
 		userService.getRow().clear();
 		return "/cxhlpage/platform/member/profile/list";
 	}
+	
 	/**
 	 * 查询最近注册的5个用户
 	 * @param pageable
@@ -65,7 +66,7 @@ public class UserContrller  extends BaseController{
 	}
 	
 	/**
-	 * 分页查询房东租客用户
+	 * 分页查询
 	 * @param pageable
 	 * @param model
 	 * @return

@@ -6,13 +6,11 @@ package com.cxhl.service;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import com.ezcloud.framework.common.Setting;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.Service;
-import com.ezcloud.framework.util.AesUtil;
 import com.ezcloud.framework.util.SettingUtils;
 import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.DataSet;
@@ -32,7 +30,6 @@ public class UserCouponService extends Service{
 	public UserCouponService() {
 		
 	}
-
 	
 	/**
 	 * @param id
@@ -45,6 +42,33 @@ public class UserCouponService extends Service{
 		String sSql ="select a.id,a.type,a.c_name as shop_name,a.link_name,a.link_tel,a.longitude, "
 				+" a.latitude,a.star,a.address,a.detail,a.average_cost from cxhl_user_coupon a  "
 				+" where a.id='"+id+"' ";
+		row =queryRow(sSql);
+		return row;
+	}
+	
+	public Row findByUserIdAndCouponId(String user_id,String coupon_id)
+	{
+		Row row =null;
+		String sSql ="select a.id,a.type,a.c_name as shop_name,a.link_name,a.link_tel,a.longitude, "
+				+" a.latitude,a.star,a.address,a.detail,a.average_cost from cxhl_user_coupon a  "
+				+" where a.user_id='"+user_id+"' and coupon_id='"+coupon_id+"' limit 0,1";
+		row =queryRow(sSql);
+		return row;
+	}
+	
+	public Row findByPayCode(String pay_code)
+	{
+		Row row =null;
+		String sSql ="select * from cxhl_user_coupon   "
+				+" where pay_code='"+pay_code+"' ";
+		row =queryRow(sSql);
+		return row;
+	}
+	public Row findNotUsedByPayCode(String pay_code)
+	{
+		Row row =null;
+		String sSql ="select * from cxhl_user_coupon   "
+				+" where pay_code='"+pay_code+"' and state='1' ";
 		row =queryRow(sSql);
 		return row;
 	}
@@ -207,6 +231,46 @@ public class UserCouponService extends Service{
 		return page;
 	}
 	
+	public Page queryPageForShopAdmin(Pageable pageable,String shop_id) {
+		Page page = null;
+		sql ="select * from "
+		+" (  "
+		+" select a.* ,b.telephone ,b.`name` as username,c.`name` as coupon_name,d.c_name as shop_name " 
+		+" from cxhl_user_coupon a   "
+		+" left join cxhl_users b on a.user_id=b.id " 
+		+" left join cxhl_coupon c on a.coupon_id=c.id " 
+		+" left join cxhl_shop d on c.shop_id=d.id  "
+		+" where coupon_id in (select id from cxhl_coupon where shop_id='"+shop_id+"') "
+		+" ) as tab   "
+		+" where 1=1 ";
+		String restrictions = addRestrictions(pageable);
+		String orders = addOrders(pageable);
+		sql += restrictions;
+		sql += orders;
+		String countSql ="select count(*) from "
+				+" (  "
+				+" select a.* ,b.telephone ,b.`name` as username,c.`name` as coupon_name,d.c_name as shop_name " 
+				+" from cxhl_user_coupon a   "
+				+" left join cxhl_users b on a.user_id=b.id " 
+				+" left join cxhl_coupon c on a.coupon_id=c.id " 
+				+" left join cxhl_shop d on c.shop_id=d.id  "
+				+" where coupon_id in (select id from cxhl_coupon where shop_id='"+shop_id+"') "
+				+" ) as tab   "
+				+" where 1=1 ";
+		countSql += restrictions;
+		countSql += orders;
+		long total = count(countSql);
+		int totalPages = (int) Math.ceil((double) total / (double) pageable.getPageSize());
+		if (totalPages < pageable.getPageNumber()) {
+			pageable.setPageNumber(totalPages);
+		}
+		int startPos = (pageable.getPageNumber() - 1) * pageable.getPageSize();
+		sql += " limit " + startPos + " , " + pageable.getPageSize();
+		dataSet = queryDataSet(sql);
+		page = new Page(dataSet, total, pageable);
+		return page;
+	}
+	
 	
 	public DataSet list(String user_id,String state,String page,String page_size)
 	{
@@ -276,4 +340,25 @@ public class UserCouponService extends Service{
 		}
 	}
 	
+	/**
+	 * 生成支付验证码
+	 * @return
+	 */
+	public String getPayCode()
+	{
+		String code ="";
+		String random_code ="";
+		String time =DateUtil.getCurrentDateTime().replace(" ", "").replace(":", "").replace("-", "").substring(0, 4);
+		int rowNum =0;
+		do
+		{
+			int rand = (int)(Math.random()*10000000);
+			random_code =String.valueOf(rand);
+			code =time+random_code;
+			String sql ="select count(*) from cxhl_user_coupon where pay_code='"+code+"'";
+			rowNum =Integer.parseInt(queryField(sql));
+		}
+		while(rowNum >0);
+		return code;
+	}
 }

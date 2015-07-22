@@ -145,7 +145,7 @@ public class UserGiftService extends Service{
 		{
 			sSql +=" and a.state='"+state+"' ";
 		}
-		sSql +=" order by create_time desc ";
+		sSql +=" order by a.create_time desc ";
 		sSql +=" limit "+iStart+" , "+page_size;
 		ds =queryDataSet(sSql);
 		Setting setting =SettingUtils.get();

@@ -22,10 +22,13 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cxhl.service.ShopAdminService;
+import com.cxhl.service.ShopService;
 import com.ezcloud.framework.exp.JException;
 import com.ezcloud.framework.service.login.Login;
 import com.ezcloud.framework.service.system.Staff;
 import com.ezcloud.framework.util.Message;
+import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
 
 /**
@@ -45,14 +48,14 @@ public class LoginController extends BaseController {
 	
 	@Resource(name = "frameworkStaffService")
 	private Staff staffService;
-
+	@Resource(name = "cxhlShopService")
+	private ShopService shopService;
+	@Resource(name = "cxhlShopAdminService")
+	private ShopAdminService shopAdminService;
+	
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/login")
 	public String login(String username, String password, String captcha, String isRememberUsername, String token ,RedirectAttributes redirectAttributes, HttpSession session, ModelMap model) {
-//		System.out.println("username:" + username);
-//		System.out.println("password:" + password);
-//		System.out.println("captcha:" + captcha);
-//		System.out.println("isRememberUsername:" + isRememberUsername);
 		Assert.notNull(username, "username can not be null");
 		Assert.notNull(password, "password can not be null");
 		Assert.notNull(captcha, "captcha can not be null");
@@ -83,6 +86,57 @@ public class LoginController extends BaseController {
 		// permissionService.getDataSet());
 		// model.addAttribute("permission", "123");
 		// return "/main/menu/main";
+		return "redirect:/main/menu/main.do";
+	}
+	
+	@RequestMapping(value = "/ShopLogin.do")
+	public String thirdLogin(String username, String password, String captcha, String shop_id, String token ,RedirectAttributes redirectAttributes, HttpSession session, ModelMap model) {
+		//取商家列表
+		DataSet ds =shopService.queryAllShop();
+		model.addAttribute("shop_list", ds);
+		return "/login/ShopLogin";
+	}
+	
+	
+	@RequestMapping(value = "/thirdLogin.do")
+	public String shopLogin(String username, String password, String captcha, String shop_id, String token ,RedirectAttributes redirectAttributes, HttpSession session, ModelMap model) {
+		Assert.notNull(username, "username can not be null");
+		Assert.notNull(password, "password can not be null");
+		Assert.notNull(captcha, "captcha can not be null");
+		Assert.notNull(shop_id, "shop_id can not be null");
+		String sessionCaptcha = (String) session.getAttribute("validateCode");
+		boolean boolCode = captcha.toUpperCase().equals(sessionCaptcha);
+		if (!boolCode) {
+			model.addAttribute("error", message("framework.validatecode.error"));
+			return "Login";
+		}
+		Row shopRow =shopAdminService.findByShopId(shop_id);
+		if(shopRow == null)
+		{
+			model.addAttribute("error", "商户账号不存在");
+			return "ShopLogin.do";
+		}
+		System.out.println("shop_id============>>"+shop_id);
+		String rtx_id =shopRow.getString("id","");
+		System.out.println("rtx_id============>>"+rtx_id);
+		try {
+			loginService.getRow().put("username", username);
+			loginService.getRow().put("password", password);
+			loginService.getRow().put("rtx_id", rtx_id);
+			if(token == null || token.replace(" ", "").length() == 0){
+				token ="";
+			}
+			token =URLDecoder.decode(token);
+			loginService.getRow().put("token", token);
+			loginService.thirdLogin();
+		} catch (JException e) {
+			e.printStackTrace();
+			model.addAttribute("error", e.getMsg());
+			return "ShopLogin.do";
+		}
+		Row staff = loginService.getRow();
+		staff.put("shop_id", shop_id);
+		session.setAttribute("staff", staff);
 		return "redirect:/main/menu/main.do";
 	}
 	

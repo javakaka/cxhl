@@ -10,86 +10,213 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>编辑房源信息</title>
+<title>编辑商家</title>
 <link href="<%=basePath%>/res/admin/css/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<%=basePath%>/resources/admin/editor/kindeditor.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/input.js"></script>
 <script type="text/javascript" src="<%=basePath%>/res/js/datePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 $().ready(function() {
-	var selected_cityId ="${row.CITY}";
-	var selected_zoneId ="${row.REGION}";
-	var pay_day ="${row.PAY_DAY}";
 
 	var $inputForm = $("#inputForm");
 	
-	//[@flash_message /]
-	
-	// 表单验证
-	$inputForm.validate({
-		rules: {
-			CODE: "required",
-			CITY: "required",
-			REGION: "required",
-			AREA: {
-				required:true,
-				number:true
-			},
-			MONTHLY_RENT: {
-				required:true,
-				number:true
-			},
-			DEPOSIT:  {
-				required:true,
-				number:true
-			},
-			START_DATE: "required",
-			END_DATE: "required",
-			PAY_DAY: "required",
-			STATUS: "required",
-			ADDRESS: "required"
-		},
-		messages:{
-			CITY:{
-				required: "请选择城市"
-			},
-			REGION:{
-				required: "请选择区域"
-			},
-			AREA:{
-				required: "请输入面积",
-				number:"请输入正确的数字"
-			},
-			MONTHLY_RENT:{
-				required: "请输入月租",
-				number:"请输入正确的数字"
-			},
-			DEPOSIT:{
-				required: "请输入押金",
-				number:"请输入正确的数字"
-			},
-			START_DATE:{
-				required: "请输入起租日期",
-				number:"请输入正确的数字"
-			},
-			END_DATE:{
-				required: "请输入终止日期",
-				number:"请输入正确的数字"
-			},
-			PAY_DAY:{
-				required: "请选择每月交租日"
-			},
-			STATUS:{
-				required: "请选择房源状态"
-			},
-			ADDRESS:{
-				required: "请输入房源的详细地址"
-			}
-		}
+	KindEditor.ready(function(K) {
+		$("input[id^='uploadButton_']").each(function(i,v){
+			var obj = this;
+			var index=i;
+			var uploadbutton = K.uploadbutton({
+				button : obj,
+				fieldName : 'file',
+				url : framework.base + "/upload/file/upload.do",
+				afterUpload : function(data) {
+					var m_type =data.message.type;
+					var m_content =data.message.content;
+					if (m_type =="success") {
+						var url = K.formatUrl(data.url, 'absolute');
+						K('#PICTURE').val(url);
+					} else {
+						$.message(m_type,m_content);
+					}
+				},
+				afterError : function(str) {
+					$.message("error","上传图片出错:"+ str);
+				}
+			});
+			uploadbutton.fileBox.change(function(e) {
+				uploadbutton.submit();
+			});
+		});
 	});
+	
+	
+	var $submitBtn = $("#submitBtn");
+	$submitBtn.click( function() {
+		var isValid =checkForm();
+		if(isValid)
+		{
+			submit();
+		}
+		return false;
+	});
+	//[@flash_message /]
+	var ID ="";
+	var C_NAME ="";
+	var TYPE ="";
+	var PROVINCE ="";
+	var CITY ="";
+	var REGION ="";
+	var LINK_NAME ="";
+	var LINK_TEL ="";
+	var LONGITUDE ="";
+	var LATITUDE ="";
+	var ADDRESS ="";
+	var STAR ="";
+	var AVERAGE_COST ="";
+	var REMARK ="";
+	var DETAIL ="";//CONTENT
+	function checkForm()
+	{
+		ID =$("#ID").val();
+		C_NAME =$("#C_NAME").val();
+		TYPE =$("#TYPE").val();
+		PROVINCE =$("#PROVINCE").val();
+		CITY =$("#CITY").val();
+		REGION =$("#REGION").val();
+		LINK_NAME =$("#LINK_NAME").val();
+		LINK_TEL =$("#LINK_TEL").val();
+		LONGITUDE =$("#LONGITUDE").val();
+		LATITUDE =$("#LATITUDE").val();
+		ADDRESS =$("#LATITUDE").val();
+		STAR =$("#STAR").val();
+		AVERAGE_COST =$("#AVERAGE_COST").val();
+		REMARK =$("#REMARK").val();
+		DETAIL =$("#editor").val();
+		if(typeof ID == "undefined" || ID == "")
+		{
+			$.message("error","编号不能为空");
+			$("#ID").focus();
+			return false;
+		}
+		if(typeof C_NAME == "undefined" || C_NAME == "")
+		{
+			$.message("error","名称不能为空");
+			$("#C_NAME").focus();
+			return false;
+		}
+		if(typeof TYPE == "undefined" || TYPE == "")
+		{
+			$.message("error","商家分类不能为空");
+			$("#TYPE").focus();
+			return false;
+		}
+		if(typeof PROVINCE == "undefined" || PROVINCE == "")
+		{
+			$.message("error","请选择省份");
+			$("#PROVINCE").focus();
+			return false;
+		}
+		if(typeof CITY == "undefined" || CITY == "")
+		{
+			$.message("error","请选择城市");
+			$("#CITY").focus();
+			return false;
+		}
+		if(typeof LINK_NAME == "undefined" || LINK_NAME == "")
+		{
+			$.message("error","联系人姓名不能为空");
+			$("#LINK_NAME").focus();
+			return false;
+		}
+		if(typeof LINK_TEL == "undefined" || LINK_TEL == "")
+		{
+			$.message("error","联系人电话不能为空");
+			$("#LINK_TEL").focus();
+			return false;
+		}
+		if(typeof LONGITUDE == "undefined" || LONGITUDE == "")
+		{
+			$.message("error","请填写经度");
+			$("#LONGITUDE").focus();
+			return false;
+		}
+		if(typeof LATITUDE == "undefined" || LATITUDE == "")
+		{
+			$.message("error","请填写纬度");
+			$("#LATITUDE").focus();
+			return false;
+		}
+		if(typeof ADDRESS == "undefined" || ADDRESS == "")
+		{
+			$.message("error","请填详细地址");
+			$("#ADDRESS").focus();
+			return false;
+		}
+		if(typeof STAR == "undefined" || STAR == "")
+		{
+			$.message("error","请填星级");
+			$("#STAR").focus();
+			return false;
+		}
+		return true;
+	}
 
+	function submit()
+	{
+		//alert('submit');
+		/**/
+		C_NAME =$("#C_NAME").val();
+		ID =$("#ID").val();
+		TYPE =$("#TYPE").val();
+		PROVINCE =$("#PROVINCE").val();
+		CITY =$("#CITY").val();
+		REGION =$("#REGION").val();
+		LINK_NAME =$("#LINK_NAME").val();
+		LINK_TEL =$("#LINK_TEL").val();
+		LONGITUDE =$("#LONGITUDE").val();
+		LATITUDE =$("#LATITUDE").val();
+		ADDRESS =$("#LATITUDE").val();
+		STAR =$("#STAR").val();
+		AVERAGE_COST =$("#AVERAGE_COST").val();
+		REMARK =$("#REMARK").val();
+		DETAIL =$("#editor").val();
+		//REMARK =$("#editor").val();
+		//alert(REMARK);
+		var params={ID: ID,C_NAME: C_NAME,TYPE: TYPE,PROVINCE_ID: PROVINCE,CITY_ID: CITY,ZONE_ID: REGION,LINK_NAME: LINK_NAME,LINK_TEL: LINK_TEL,LONGITUDE: LONGITUDE,LATITUDE: LATITUDE,ADDRESS: ADDRESS,STAR: STAR,REMARK: REMARK,DETAIL: DETAIL,AVERAGE_COST: AVERAGE_COST}
+		$.ajax({
+				url: "<%=basePath%>cxhlpage/platform/shop/profile/save.do",
+				type: "POST",
+				data: params,
+				dataType: "json",
+				cache: false,
+				beforeSend: function (XMLHttpRequest){
+					//alert('.....');
+				},
+				success: function(ovo, textStatus) {
+					var code =ovo.code;
+					if(code >=0)
+					{
+						var v_id =ovo.oForm.ID;
+						$.message("success","保存成功");
+					}
+					else
+					{
+						$.message("error",ovo.msg);
+					}
+				},
+				complete: function (XMLHttpRequest, textStatus){
+					//alert("complete...");
+				},
+				error: function (){
+					alert('error...');
+				}
+			});
+			
+		//window.parent.enableTab("detail","detail.jsp?id=1");
+	}
+	
 	var province_select =$("#PROVINCE");
 	var city_select =$("#CITY");
 	var region_select =$("#REGION");
@@ -115,11 +242,12 @@ $().ready(function() {
 					var city_list =data.oForm.CITY_LIST;
 					city_select.html("");
 					var option_html ="";
-					option_html +="<option value=\"\" >请选择...</option>";
+					option_html +="<option value='' >请选择...</option>";
 					$.each(city_list,function(i,item){
 						option_html +="<option value=\""+item.ID+"\" >"+item.NAME+"</option>";
 					});
 					city_select.html(option_html);
+					region_select.html("<option value='' >请选择...</option>");
 				},
 				complete: function (XMLHttpRequest, textStatus){
 				},
@@ -150,12 +278,11 @@ $().ready(function() {
 					var zone_list =data.oForm.ZONE_LIST;
 					region_select.html("");
 					var option_html ="";
-					option_html +="<option value=\"\" >请选择...</option>";
+					option_html +="<option value='' >请选择...</option>";
 					$.each(zone_list,function(i,zone){
 						option_html +="<option value=\""+zone.ID+"\" >"+zone.NAME+"</option>";
 					});
 					region_select.html(option_html);
-					region_select.val(selected_zoneId);
 				},
 				complete: function (XMLHttpRequest, textStatus){
 					//alert("complete...");
@@ -165,249 +292,243 @@ $().ready(function() {
 				}
 			});
 	});
-
-	var pay_day_select =$("#PAY_DAY");
-	pay_day_select.val(pay_day);
+	
 });
 </script>
 </head>
 <body>
 	<div class="path">
-		管理中心 &raquo; 编辑房源信息
+		商家管理 &raquo; 添加商家
 	</div>
-	<form id="inputForm" action="update.do" method="post">
-	<input type="hidden" name="ID" class="text" maxlength="200" value="${row.ID}"/>
+	<form id="inputForm" action="save.do" method="post">
 		<table class="input">
-			<tr>
-				<th>
-					<span class="requiredField">*</span>唯一码:
-				</th>
-				<td>
-					<input type="text" name="CODE" class="text" maxlength="200" value="${row.CODE}" readonly/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>省份:
-				</th>
-				<td>
-					<select id="PROVINCE" name ="PROVINCE" style="width:190px;" >
+		<tr>
+			<th>
+				<span class="requiredField">*</span>商家名称:
+			</th>
+			<td>
+				<input type="text" id="ID" name="ID" class="hidden" maxlength="200" value="${row.ID }" />
+				<input type="text" id="C_NAME" name="C_NAME" class="text" maxlength="200" value="${row.C_NAME }" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<span class="requiredField">*</span>商家分类:
+			</th>
+			<td>
+			<select  id="TYPE" name="TYPE" class="text" style="width:190px;" >
+				<option value="" selected>请选择...</option>
+				<c:forEach items="${shop_type_list}" var="list" varStatus="status">
+					<c:choose>
+						<c:when test="${row.TYPE == list.ID }">
+							<option value="${list.ID}" selected>${list.NAME}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${list.ID}" >${list.NAME}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</select>
+		</td>
+		</tr>
+		<tr>
+			<th>
+				<span class="requiredField">*</span>省份:
+			</th>
+			<td>
+				<select id="PROVINCE" name ="PROVINCE" style="width:190px;" >
+					<option value="" >请选择...</option>
+					<c:forEach items="${province_list}" var="province" varStatus="status">
+						<c:choose>
+						<c:when test="${row.PROVINCE_ID == province.ID}">
+							<option value="${province.ID}" selected>${province.NAME}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${province.ID}" >${province.NAME}</option>
+						</c:otherwise>
+					</c:choose>
+					</c:forEach>
+				</select>
+				<span class="requiredField">*</span>城市:
+				<select id="CITY" name ="CITY" style="width:190px;" >
 						<option value="" >请选择...</option>
-						<c:forEach items="${province_list}" var="province" varStatus="status">
+						<c:forEach items="${city_list}" var="city" varStatus="status">
 							<c:choose>
-								<c:when test="${province.ID == row.PROVINCE}">
-									<option value="${province.ID}" selected>${province.NAME}</option>
+								<c:when test="${row.CITY_ID == city.ID}">
+									<option value="${city.ID}" selected>${city.NAME}</option>
 								</c:when>
-								<c:otherwise><option value="${province.ID}" >${province.NAME}</option></c:otherwise>
+								<c:otherwise>
+									<option value="${city.ID}" >${city.NAME}</option>
+								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>城市:
-				</th>
-				<td>
-					<select id="CITY" name ="CITY" style="width:190px;" >
-						<option value="" >请选择...</option>
-							<c:forEach items="${city_list}" var="city" varStatus="status">
-							<c:choose>
-								<c:when test="${city.ID == row.CITY}"><option value="${row.CITY}" selected>${city.NAME}</option></c:when>
-								<c:otherwise><option value="${city.ID}" >${city.NAME}</option></c:otherwise>
-							</c:choose>
-							</c:forEach>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
 					区域:
-				</th>
-				<td>
 					<select id="REGION" name ="REGION" style="width:190px;" >
 						<option value="" >请选择...</option>
 							<c:forEach items="${zone_list}" var="zone" varStatus="status">
-							<c:choose>
-								<c:when test="${zone.ID == row.REGION}"><option value="${row.REGION}" selected>${zone.NAME}</option></c:when>
-								<c:otherwise><option value="${zone.ID}" >${zone.NAME}</option></c:otherwise>
+								<c:choose>
+								<c:when test="${row.REGION_ID == city.ID}">
+									<option value="${zone.ID}" selected>${zone.NAME}</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${zone.ID}" >${zone.NAME}</option>
+								</c:otherwise>
 							</c:choose>
 							</c:forEach>
 					</select>
-				</td>
-			</tr>
-			<tr>
+			</td>
+		</tr>
+		
+		<tr>
 				<th>
-					<span class="requiredField">*</span>面积:
+					<span class="requiredField">*</span>联系人姓名:
 				</th>
 				<td>
-					<input type="text" name="AREA" class="text" maxlength="200" value="${row.AREA}"/>
+					<input type="text" id="LINK_NAME" name="LINK_NAME" class="text" maxlength="200" value="${row.LINK_NAME }" />
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					<span class="requiredField">*</span>月租:
+					<span class="requiredField">*</span>联系电话:
 				</th>
 				<td>
-					<input type="text" name="MONTHLY_RENT" class="text" maxlength="200" value="${row.MONTHLY_RENT}"/>
+					<input type="text" id="LINK_TEL" name="LINK_TEL" class="text" maxlength="200" value="${row.LINK_TEL }" />
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					<span class="requiredField">*</span>押金:
+					<span class="requiredField">*</span>地理位置经度:
 				</th>
 				<td>
-					<input type="text" name="DEPOSIT" class="text" maxlength="200" value="${row.DEPOSIT}"/>
+					<input type="text" id="LONGITUDE" name="LONGITUDE" class="text" maxlength="200" value="${row.LONGITUDE }" />
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					<span class="requiredField">*</span>开始日期:
+					<span class="requiredField">*</span>地理位置纬度:
 				</th>
 				<td>
-					<input type="text" name="START_DATE" class="text Wdate" onfocus="WdatePicker();" maxlength="200" value="${row.START_DATE}"/>
+					<input type="text" id="LATITUDE" name="LATITUDE" class="text" maxlength="200" value="${row.LATITUDE }" />
 				</td>
 			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>结束日期:
-				</th>
-				<td>
-					<input type="text" name="END_DATE" class="text Wdate" onfocus="WdatePicker();" maxlength="200" value="${row.END_DATE}"/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>收款日:
-				</th>
-				<td>
-					<select id="PAY_DAY" name ="PAY_DAY" style="width:190px;" >
-						<option value="" >请选择...</option>
-						<option value="01" selected>01</option>
-						<option value="02" >02</option>
-						<option value="03" >03</option>
-						<option value="04" >04</option>
-						<option value="05" >05</option>
-						<option value="06" >06</option>
-						<option value="07" >07</option>
-						<option value="08" >08</option>
-						<option value="09" >09</option>
-						<option value="10" >10</option>
-						<option value="11" >11</option>
-						<option value="12" >12</option>
-						<option value="13" >13</option>
-						<option value="14" >14</option>
-						<option value="15" >15</option>
-						<option value="16" >16</option>
-						<option value="17" >17</option>
-						<option value="18" >18</option>
-						<option value="19" >19</option>
-						<option value="20" >20</option>
-						<option value="21" >21</option>
-						<option value="22" >22</option>
-						<option value="23" >23</option>
-						<option value="24" >24</option>
-						<option value="25" >25</option>
-						<option value="26" >26</option>
-						<option value="27" >27</option>
-						<option value="28" >28</option>
-						<option value="29" >29</option>
-						<option value="30" >30</option>
-						<option value="31" >31</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					邀请码:
-				</th>
-				<td>
-					<input type="text" name="INVITE_CODE" class="text" maxlength="200" value="${row.INVITE_CODE}"/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>状态:
-				</th>
-				<td>
-					<select id="STATUS" name ="STATUS" style="width:190px;" >
-					<c:choose>
-						<c:when test="${row.STATUS == 0}">
-							<option value="" >请选择...</option>
-							<option value="0" selected>待租</option>
-							<option value="1" >签约中</option>
-						</c:when>
-						<c:when test="${row.STATUS == 1}">
-							<option value="" >请选择...</option>
-							<option value="0" >待租</option>
-							<option value="1" selected>签约中</option>
-						</c:when>
-						<c:otherwise>
-							<option value="" selected>请选择...</option>
-							<option value="0" >待租</option>
-							<option value="1" >签约中</option>
-						</c:otherwise>
-					</c:choose>
-					</select>
-				</td>
-			</tr>
-			<tr>
+		<tr>
 				<th>
 					<span class="requiredField">*</span>详细地址:
 				</th>
 				<td>
-					<input type="text" name="ADDRESS" class="text" maxlength="500px" value="${row.ADDRESS}" style="width:350px;" />
+					<input type="text" id="ADDRESS" name="ADDRESS" class="text" maxlength="200" value="${row.ADDRESS }" />
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					水表读数:
+					<span class="requiredField">*</span>星级:
 				</th>
 				<td>
-					<input type="text" name="WATER_NUM" class="text" maxlength="200" value="${row.WATER_NUM}"/>
+					<select id="STAR" name ="STAR" style="width:190px;" >
+						<c:choose>
+							<c:when test="${row.STAR ==0 }">
+								<option value="" >请选择...</option>
+								<option value="0" selected>无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" >二星</option>
+								<option value="3" >三星</option>
+								<option value="4" >四星</option>
+								<option value="5" >五星</option>
+							</c:when>
+							<c:when test="${row.STAR ==1 }">
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" selected>一星</option>
+								<option value="2" >二星</option>
+								<option value="3" >三星</option>
+								<option value="4" >四星</option>
+								<option value="5" >五星</option>
+							</c:when>
+							<c:when test="${row.STAR ==2 }">
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" selected>二星</option>
+								<option value="3" >三星</option>
+								<option value="4" >四星</option>
+								<option value="5" >五星</option>
+							</c:when>
+							<c:when test="${row.STAR == 3}">
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" >二星</option>
+								<option value="3" selected>三星</option>
+								<option value="4" >四星</option>
+								<option value="5" >五星</option>
+							</c:when>
+							<c:when test="${row.STAR ==4 }">
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" >二星</option>
+								<option value="3" >三星</option>
+								<option value="4" selected>四星</option>
+								<option value="5" >五星</option>
+							</c:when>
+							<c:when test="${row.STAR ==5 }">
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" >二星</option>
+								<option value="3" >三星</option>
+								<option value="4" >四星</option>
+								<option value="5" selected>五星</option>
+							</c:when>
+							<c:otherwise>
+								<option value="" >请选择...</option>
+								<option value="0" >无星级</option>
+								<option value="1" >一星</option>
+								<option value="2" >二星</option>
+								<option value="3" >三星</option>
+								<option value="4" >四星</option>
+								<option value="5" selected>五星</option>
+							</c:otherwise>
+						</c:choose>
+					</select>
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					电表读数:
+					<span class="requiredField">*</span>平均消费:
 				</th>
 				<td>
-					<input type="text" name="ELECTRICITY_NUM" class="text" maxlength="200" value="${row.ELECTRICITY_NUM}"/>
+					<input type="text" id="AVERAGE_COST" name="AVERAGE_COST" class="text" maxlength="200" value="${row.AVERAGE_COST }" />
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					燃气读数:
+					<span class="requiredField">*</span>简要介绍:
 				</th>
 				<td>
-					<input type="text" name="GAS_NUM" class="text" maxlength="200" value="${row.GAS_NUM}"/>
+					<textarea cols="50" rows="5" id="REMARK" name="REMARK" >${row.REMARK }</textarea>
 				</td>
 			</tr>
-			<tr>
+		<tr>
 				<th>
-					物业管理费:
+					<span class="requiredField">*</span>详细图文介绍:
 				</th>
 				<td>
-					<input type="text" name="PROPERTY" class="text" maxlength="200" value="${row.PROPERTY}"/>
+					<textarea id="editor" name="CONTENT" class="editor">${row.DETAIL }</textarea>
+				</td>
 				</td>
 			</tr>
-			<tr>
-				<th>
-					备注:
-				</th>
-				<td>
-					<input type="text" name="REMARK" class="text" maxlength="500px" value="${row.REMARK}" style="width:350px;"  />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					&nbsp;
-				</th>
-				<td>
-					<input type="submit" class="button" value="<cc:message key="admin.common.submit" />" />
-					<input type="button" id="backButton" class="button" value="<cc:message key="admin.common.back" />" />
-				</td>
-			</tr>
+			
+		<tr>
+			<th>
+				&nbsp;
+			</th>
+			<td>
+				<input type="button" id="submitBtn" class="button" value="确定"/>
+				<input type="button" id="backBtn" class="button" value="返回" onclick="javascript:window.parent.location.href='list.do'"/>
+			</td>
+		</tr>
 		</table>
 	</form>
 </body>

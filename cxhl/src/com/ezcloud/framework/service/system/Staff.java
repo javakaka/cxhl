@@ -16,6 +16,15 @@ import com.ezcloud.framework.vo.Row;
 @Component("frameworkStaffService")
 public class Staff extends Service{
 
+	public int insert(Row row)
+	{
+		int rowNum =0;
+		int id =getTableSequence("sm_staff", "staff_no", 10000);
+		row.put("staff_no", id);
+		insert("sm_staff",row);
+		return rowNum;
+	}
+	
 	public Row find(String id)
 	{
 		Row row =null;

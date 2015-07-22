@@ -40,7 +40,7 @@ public class StringUtils {
 	public static boolean isTelphone(String telephone)
 	{
 		boolean bool =true;
-		String regex = "^((13[0-9])|(172)|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$"; 
+		String regex = "^((13[0-9])|(172)|(14[5|7])|(15([0-3]|[5-9]))|(18[0-9]))\\d{8}$"; 
 		bool =check(telephone, regex);
 		return bool;
 	}
@@ -156,5 +156,6 @@ public class StringUtils {
 		boolean bool =isEmail(email);
 		System.out.println("bool:"+bool);
 		System.out.println(subStrBeforeDotNotIncludeDot(email));
+		System.out.println(isTelphone("18275887408"));
 	}
 }

@@ -30,7 +30,7 @@ public class UserTokenService extends Service{
 	public Row find(String id)
 	{
 		Row row =null;
-		String sSql =" select * from cxhl_users_token where user_id='"+id+"' ";
+		String sSql =" select * from cxhl_users_token where user_id='"+id+"' limit 0,1 ";
 		row =queryRow(sSql);
 		return row;
 	}

@@ -123,30 +123,22 @@ public class ShopController extends BaseController {
 		String latitude =row.getString("latitude","");
 		String star =row.getString("star","");
 		String address =row.getString("address","");
+		String remark =row.getString("remark","");
 		String detail =row.getString("detail","");
 //		String file_path =row.getString("file_path","");
 		String average_cost =row.getString("average_cost","");
-//		Setting setting =SettingUtils.get();
-//		String url =setting.getSiteUrl();
-//		if( !StringUtils.isEmptyOrNull(file_path))
-//		{
-//			int iPos =file_path.indexOf("resources");
-//			if(iPos !=-1)
-//			{
-//				file_path =file_path.substring(iPos);
-//				file_path =url+"/"+file_path;
-//			}
-//		}
-//		String domain =url;
-//		int iPos =url.lastIndexOf("/");
-//		if(iPos != -1)
-//		{
-//			domain =url.substring(0,iPos);
-//		}
-//		//替换图片标签的url为http全路径
-//		detail =HtmlUtils.fillImgSrcWithDomain(domain, detail);
-//		// 转义字符串中的换行，不然在转成json对象时会报错
-//		detail =StringUtils.string2Json(detail);
+		Setting setting =SettingUtils.get();
+		String siteUrl =setting.getSiteUrl();
+		String domain =siteUrl;
+		int iPos =siteUrl.lastIndexOf("/");
+		if(iPos != -1)
+		{
+			domain =siteUrl.substring(0,iPos);
+		}
+		//替换图片标签的url为http全路径
+		detail =HtmlUtils.fillImgSrcWithDomain(domain, detail);
+		// 转义字符串中的换行，不然在转成json对象时会报错
+		detail =StringUtils.string2Json(detail);
 		//pics 
 		DataSet ds =shopService.findShopPicture(id);
 		ovo =new OVO(0,"操作成功","");
@@ -161,6 +153,7 @@ public class ShopController extends BaseController {
 		ovo.set("address", address);
 		ovo.set("detail", detail);
 		ovo.set("average_cost", average_cost);
+		ovo.set("remark", remark);
 		ovo.set("picture_ds", ds);
 		//
 		return AesUtil.encode(VOConvert.ovoToJson(ovo));

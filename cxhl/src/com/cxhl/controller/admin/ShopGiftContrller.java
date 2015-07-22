@@ -21,7 +21,9 @@ import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.util.MapUtils;
 import com.ezcloud.framework.util.Message;
+import com.ezcloud.framework.util.ResponseVO;
 import com.ezcloud.framework.util.StringUtils;
+import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
 
 @Controller("cxhlPlatformShopGiftController")
@@ -52,26 +54,58 @@ public class ShopGiftContrller  extends BaseController{
 		return "/cxhlpage/platform/shop/gift/list";
 	}
 	
-
+	/**
+	 * 分页选择
+	 * @param pageable
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/SelectGift")
+	public String selectUserList(String id,Pageable pageable, ModelMap model) {
+		shopGiftService.getRow().put("pageable", pageable);
+		Page page = shopGiftService.queryPage();
+		model.addAttribute("page", page);
+		if(StringUtils.isEmptyOrNull(id))
+		{
+			id ="";
+		}
+		model.addAttribute("id", id);
+		shopGiftService.getRow().clear();
+		return "/cxhlpage/platform/shop/gift/SelectGift";
+	}
+	
 	@RequestMapping(value = "/add")
 	public String add(ModelMap model) {
-		//商家列表
-//		shopService.find("");
+		DataSet shop_list =shopService.queryAllShop();
+		model.addAttribute("shop_list", shop_list);
 		return "/cxhlpage/platform/shop/gift/add";
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(@RequestParam HashMap<String,String> map,RedirectAttributes redirectAttributes) throws Exception {
+	public @ResponseBody ResponseVO save(@RequestParam HashMap<String,String> map,RedirectAttributes redirectAttributes) throws Exception {
 		Row row =MapUtils.convertMaptoRowWithoutNullField(map);
-		shopTypeService.insert(row);
-		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
-		return "redirect:list.do";
+		String id=row.getString("id","");
+		String total_num =row.getString("total_num","0");
+		if(StringUtils.isEmptyOrNull(id))
+		{
+			row.put("left_num", total_num);
+			shopGiftService.insert(row);
+		}
+		else
+		{
+			shopGiftService.update(row);
+		}
+		ResponseVO ovo =new ResponseVO(0, "保存成功");
+		id =row.getString("id");
+		return ovo;
 	}
 
 	@RequestMapping(value = "/edit")
 	public String edit(Long id, ModelMap model) throws Exception {
 		Assert.notNull(id);
-		Row row =shopTypeService.find(String.valueOf(id));
+		DataSet shop_list =shopService.queryAllShop();
+		model.addAttribute("shop_list", shop_list);
+		Row row =shopGiftService.find(String.valueOf(id));
 		model.addAttribute("row", row);
 		return "/cxhlpage/platform/shop/gift/edit";
 	}
@@ -79,7 +113,7 @@ public class ShopGiftContrller  extends BaseController{
 	@RequestMapping(value = "/update")
 	public String update(@RequestParam HashMap<String,String> map,RedirectAttributes redirectAttributes) throws Exception {
 		Row row=MapUtils.convertMaptoRowWithoutNullField(map);
-		shopTypeService.update(row);
+		shopGiftService.update(row);
 		addFlashMessage(redirectAttributes,SUCCESS_MESSAGE);
 		return "redirect:list.do";
 	}
@@ -87,7 +121,7 @@ public class ShopGiftContrller  extends BaseController{
 	@RequestMapping(value = "/delete")
 	public @ResponseBody
 	Message delete(String[] ids) {
-		shopTypeService.delete(ids);
+		shopGiftService.delete(ids);
 		return SUCCESS_MESSAGE;
 	}
 	

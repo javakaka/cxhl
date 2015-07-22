@@ -8,10 +8,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.ezcloud.framework.common.Setting;
 import com.ezcloud.framework.page.jdbc.Page;
 import com.ezcloud.framework.page.jdbc.Pageable;
 import com.ezcloud.framework.service.Service;
-import com.ezcloud.framework.util.AesUtil;
+import com.ezcloud.framework.util.SettingUtils;
 import com.ezcloud.framework.util.StringUtils;
 import com.ezcloud.framework.vo.DataSet;
 import com.ezcloud.framework.vo.Row;
@@ -129,13 +130,44 @@ public class UserCollectionService extends Service{
 	{
 		DataSet ds =new DataSet();
 		int start =(Integer.parseInt(page)-1)*Integer.parseInt(page_size);
-		String sSql =" select a.id,a.c_id as shop_id,a.create_time , "
-				+ " b.c_name as shop_name,b.remark from cxhl_user_collection a " 
-				+" left join cxhl_shop b on a.c_id=b.id "
+		String sSql ="select a.id,a.c_id as shop_id,a.create_time , "
+				+" b.c_name as shop_name,b.remark,d.file_path from cxhl_user_collection a " 
+				+" left join cxhl_shop b on a.c_id=b.id  "
+				+" left join file_attach_control c on a.id=c.DEAL_CODE and c.DEAL_TYPE='shop_icon' " 
+				+" left join file_attach_upload d on d.CONTROL_ID=c.CONTROL_ID  "
 				+" where a.user_id ='"+user_id+"' "
 				+" order by a.create_time desc "
 				+" limit "+start+" ,"+page_size;
 		ds =queryDataSet(sSql);
+		Setting setting =SettingUtils.get();
+		String url =setting.getSiteUrl();
+		if(StringUtils.isEmptyOrNull(url))
+		{
+			url ="";
+		}
+		if(ds != null && ds.size() >0 )
+		{
+			for(int i=0;i<ds.size(); i++)
+			{
+				Row row =(Row)ds.get(i);
+				String file_path =row.getString("file_path","");
+				int iPos =-1;
+				if(!StringUtils.isEmptyOrNull(file_path))
+				{
+					iPos =file_path.indexOf("resources");
+					if(iPos != -1)
+					{
+						file_path =url+"/"+file_path.substring(iPos);
+					}
+				}
+				else
+				{
+					file_path ="";
+				}
+				row.put("SHOP_PICTURE", file_path);
+				ds.set(i, row);
+			}
+		}
 		return ds;
 	}
 	

@@ -44,7 +44,17 @@ public class ShopService extends Service{
 	{
 		Row row =null;
 		String sSql ="select a.id,a.type,a.c_name as shop_name,a.link_name,a.link_tel,a.longitude, "
-				+" a.latitude,a.star,a.address,a.detail,a.average_cost from cxhl_shop a  "
+				+" a.latitude,a.star,a.address,a.detail,a.average_cost,a.remark from cxhl_shop a  "
+				+" where a.id='"+id+"' ";
+		row =queryRow(sSql);
+		return row;
+	}
+	
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public Row findDetail(String id)
+	{
+		Row row =null;
+		String sSql ="select * from cxhl_shop a  "
 				+" where a.id='"+id+"' ";
 		row =queryRow(sSql);
 		return row;
@@ -244,7 +254,19 @@ public class ShopService extends Service{
 			}
 			sql = "delete from cxhl_shop where id in(" + id + ")";
 			update(sql);
+			sql ="delete from cxhl_gift where shop_id in(" + id + ")";
+			update(sql);
+			sql ="delete from cxhl_coupon where shop_id in(" + id + ")";
+			update(sql);
 		}
 	}
 	
+	public DataSet queryAllShop()
+	{
+		DataSet ds =new DataSet();
+		String sql ="select id,c_name from cxhl_shop ";
+		ds =queryDataSet(sql);
+		return ds;
+		
+	}
 }

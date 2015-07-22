@@ -111,16 +111,16 @@ $().ready(function() {
 	</div>
 	<form id="listForm" action="list.do" method="get">
 		<div class="bar">
-			<!-- 
-			<a href="add.do" class="iconButton">
+			<a href="add_tab.jsp" class="iconButton">
 				<span class="addIcon">&nbsp;</span><cc:message key="admin.common.add" />
 			</a>
+			<!-- 
 			-->
 			<div class="buttonWrap">
-				<!-- 
 				<a href="javascript:;" id="deleteButton" class="iconButton disabled">
 					<span class="deleteIcon">&nbsp;</span><cc:message key="admin.common.delete" />
 				</a>
+				<!-- 
 				-->
 				<a href="javascript:;" id="refreshButton" class="iconButton">
 					<span class="refreshIcon">&nbsp;</span><cc:message key="admin.common.refresh" />
@@ -252,8 +252,8 @@ $().ready(function() {
 						<span title="${row.CREATE_TIME}">${row.CREATE_TIME}</span>
 					</td>
 					<td>
+						<a href="edit_tab.jsp?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
 					<!--
-						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>
 						<a href="edit.do?id=${row.ID}"><cc:message key="admin.common.edit" /></a>-->
 						<!--<a href="#" target="_blank"><cc:message key="admin.common.view" /></a>-->
 					</td>
