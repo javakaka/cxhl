@@ -1220,12 +1220,12 @@ public class ApiTest {
 	//用户消费优惠券记录汇总页面
 	public static void userCouponSummary()
 	{
-		String url ="http://localhost:8080/cxhl/api/user/coupon/order/summary.do";
-//			String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/coupon/order/summary.do";
+//		String url ="http://localhost:8080/cxhl/api/user/coupon/order/summary.do";
+			String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/coupon/order/summary.do";
 		IVO ivo =new IVO();
 		try {
 			ivo.set("user_id", "1");
-			ivo.set("month", "2015-06");
+//			ivo.set("month", "2015-06");
 			String json =  VOConvert.ivoToJson(ivo);
 			System.out.println("\n 加密前 ivo to json ====>>"+json);
 			//加密
@@ -1661,7 +1661,7 @@ public class ApiTest {
 //		查询商家详情
 //		queryShopDetail();
 //		分页查询商家优惠券
-		queryShopCouponPage();
+//		queryShopCouponPage();
 //		分页查询商家优惠券图文详情
 //		queryShopCouponRemark();
 //		创建订单
@@ -1675,7 +1675,7 @@ public class ApiTest {
 //		创建用户消费优惠券订单
 //		createCouponOrder();
 //		用户消费优惠券记录汇总页面
-//		userCouponSummary();
+		userCouponSummary();
 //		查询指定月份的用户消费优惠券的详情
 //		userCouponMonthList();
 //		上传头像
