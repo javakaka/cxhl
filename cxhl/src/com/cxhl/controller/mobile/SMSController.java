@@ -95,7 +95,8 @@ public class SMSController extends BaseController {
 			}
 		}
 		int sms_code =NumberUtils.getSixRandomNumber();
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，感谢您的注册，您的验证码是："+sms_code+" ";
+//		String sms_content ="1074吃香喝辣带您免费吃遍南宁，感谢您的注册，您的验证码是："+sms_code+" ";
+		String sms_content ="感谢您的注册，您的验证码是："+sms_code+" ";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口
@@ -218,7 +219,7 @@ public class SMSController extends BaseController {
 //			}
 //		}
 		int sms_code =NumberUtils.getSixRandomNumber();
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，找回密码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。";
+		String sms_content ="找回密码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口
@@ -354,7 +355,7 @@ public class SMSController extends BaseController {
 //		}
 		int sms_code =NumberUtils.getSixRandomNumber();
 //		String sms_content ="欢迎使用吃香喝辣,您的验证码是:"+sms_code+"【房不剩房】";
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，更换手机号码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。 ";
+		String sms_content ="更换手机号码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。 ";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口

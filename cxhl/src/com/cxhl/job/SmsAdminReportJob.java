@@ -32,7 +32,7 @@ public class SmsAdminReportJob extends Service{
 	{
 		logger.info("-----------每天早上9点发送短信！！----------------");
 		int sms_code =NumberUtils.getSixRandomNumber();
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，感谢您的注册，您的验证码是："+sms_code+" ";
+		String sms_content ="感谢您的注册，您的验证码是："+sms_code+" ";
 		String sms_switch =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "SWITCH");
 		String sms_url =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "URL");
 		String sms_sn =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "USERNAME");
