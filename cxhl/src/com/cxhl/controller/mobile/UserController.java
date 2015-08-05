@@ -336,6 +336,15 @@ public class UserController extends BaseController {
 			ovo.set("invite_code", invite_code);
 			ovo.set("user_code", user_code);
 			//写日志
+			//token
+			String token ="";
+			String cur_time =DateUtil.getCurrentDateTime();
+			token =Md5Util.Md5(id+cur_time);
+			Row tokenRow =new Row();
+			tokenRow.put("user_id", id);
+			tokenRow.put("token", token);
+			ovo.set("token", token);
+			userTokenService.update(tokenRow);
 			return AesUtil.encode(VOConvert.ovoToJson(ovo));
 		}
 		else

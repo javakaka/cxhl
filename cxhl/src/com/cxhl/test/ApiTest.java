@@ -59,7 +59,7 @@ public class ApiTest {
 		IVO ivo =new IVO();
 		   try {
 			   //手机号
-				ivo.set("telephone", "13826531131");
+				ivo.set("telephone", "13826531136");
 //				ivo.set("telephone", "13826531137");
 //				ivo.set("telephone", "13590856852");
 				//1 发送短信 0不发送短信
@@ -86,12 +86,15 @@ public class ApiTest {
 	//登陆
 	public static void login()
 	{
-		String url ="http://localhost:8080/cxhl/api/user/login.do";
-//		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/login.do";
+//		String url ="http://localhost:8080/cxhl/api/user/login.do";
+		String url ="http://ilef.vxg196.10000net.cn/cxhl/api/user/login.do";
 		IVO ivo =new IVO();
 		   try {
-				ivo.set("username", "13826531136");
-//				ivo.set("username", "13826531137");
+//				ivo.set("username", "13826531136");
+//			   ivo.set("password", "E10ADC3949BA59ABBE56E057F20F883E");
+				ivo.set("username", "18680322654");
+				ivo.set("password", "E10ADC3949BA59ABBE56E057F20F883E");
+				ivo.set("username", "15877126901");
 				ivo.set("password", "E10ADC3949BA59ABBE56E057F20F883E");
 				//客户端版本
 				ivo.set("version", "1.1");
@@ -1606,7 +1609,7 @@ public class ApiTest {
 //获取最新版本		
 //		getVersion();
 //		发送短信验证码
-//		sendSms();
+		sendSms();
 //		注册
 //		register();
 //		登陆
@@ -1675,7 +1678,7 @@ public class ApiTest {
 //		创建用户消费优惠券订单
 //		createCouponOrder();
 //		用户消费优惠券记录汇总页面
-		userCouponSummary();
+//		userCouponSummary();
 //		查询指定月份的用户消费优惠券的详情
 //		userCouponMonthList();
 //		上传头像

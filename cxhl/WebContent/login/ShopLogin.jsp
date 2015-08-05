@@ -1,5 +1,7 @@
-<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8" isELIgnored="false" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="/cctaglib" prefix="cc"%>
 <%@page import="java.util.UUID,java.net.URLEncoder"%>
 <%
 String path = request.getContextPath();
@@ -111,7 +113,7 @@ else
 <script type="text/javascript" src="<%=basePath%>/res/js/rsa.js"></script>
 <script type="text/javascript">
 	$().ready( function() {
-		
+		${flash_message};
 		var $loginForm = $("#loginForm");
 		var $enPassword = $("#enPassword");
 		var $username = $("#username");

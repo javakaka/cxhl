@@ -69,6 +69,22 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
+					通道组编号不能为空:
+				</th>
+				<td>
+					<input type="text" name="cgid" class="text" maxlength="500" value="${cgid}" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					默认使用的签名编号:
+				</th>
+				<td>
+					<input type="text" name="csid" class="text" maxlength="500" value="${csid}" style="width:300px;"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
 					系统是否开放短信注册:
 				</th>
 				<td>

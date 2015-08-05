@@ -95,16 +95,18 @@ public class SMSController extends BaseController {
 			}
 		}
 		int sms_code =NumberUtils.getSixRandomNumber();
-//		String sms_content ="欢迎使用吃香喝辣,您的验证码是:"+sms_code+"【房不剩房】";
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，感谢您的注册，您的验证码是："+sms_code+"【吃香喝辣】";
+		String sms_content ="1074吃香喝辣带您免费吃遍南宁，感谢您的注册，您的验证码是："+sms_code+" ";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口
 		long remote_send_status =0;
 		if(type.equals("1"))
 		{
+			String sms_url =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "URL");
 			String sms_sn =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "USERNAME");
 			String sms_pwd =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "PASSWORD");
+			String sms_cgid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CGID");
+			String sms_csid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CSID");
 			if(StringUtils.isEmptyOrNull(sms_sn) || StringUtils.isEmptyOrNull(sms_pwd))
 			{
 				ovo =new OVO(-1,"短信发送异常，请稍后再试","");
@@ -112,16 +114,19 @@ public class SMSController extends BaseController {
 			}
 			logger.info("sms_sn------------------>>"+sms_sn);
 			logger.info("sms_pwd------------------>>"+sms_pwd);
-//			SmsWebSocketClient smsClient =new SmsWebSocketClient(sms_sn,sms_pwd);
-			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
-//			remote_send_status =Long.parseLong(smsClient.mt(telephone, sms_content, "", "", ""));
-			if(remote_send_status == 0)
+//			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
+			remote_send_status =SmsWebServiceUtil.sendC123Sms(sms_url, sms_sn, sms_pwd, 
+					Integer.parseInt(sms_cgid), Integer.parseInt(sms_csid), 
+					telephone, sms_content);
+			if(remote_send_status > 0)
 			{
 				status =1;
 			}
 			else
 			{
 				status =0;
+				ovo =new OVO(-1,"发送短信验证码失败","发送短信验证码失败");
+				return AesUtil.encode(VOConvert.ovoToJson(ovo));
 			}
 //			status =1;
 		}
@@ -213,32 +218,36 @@ public class SMSController extends BaseController {
 //			}
 //		}
 		int sms_code =NumberUtils.getSixRandomNumber();
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，找回密码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。【吃香喝辣】";
+		String sms_content ="1074吃香喝辣带您免费吃遍南宁，找回密码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口
 		long remote_send_status =0;
 		if(type.equals("1"))
 		{
+			String sms_url =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "URL");
 			String sms_sn =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "USERNAME");
 			String sms_pwd =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "PASSWORD");
+			String sms_cgid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CGID");
+			String sms_csid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CSID");
 			if(StringUtils.isEmptyOrNull(sms_sn) || StringUtils.isEmptyOrNull(sms_pwd))
 			{
 				ovo =new OVO(-1,"短信发送异常，请稍后再试","");
 				return AesUtil.encode(VOConvert.ovoToJson(ovo));			
 			}
-			logger.info("sms_sn------------------>>"+sms_sn);
-			logger.info("sms_pwd------------------>>"+sms_pwd);
-			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
-//			SmsWebSocketClient smsClient =new SmsWebSocketClient(sms_sn,sms_pwd);
-//			remote_send_status =Long.parseLong(smsClient.mt(telephone, sms_content, "", "", ""));
-			if(remote_send_status== 0)
+//			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
+			remote_send_status =SmsWebServiceUtil.sendC123Sms(sms_url, sms_sn, sms_pwd, 
+					Integer.parseInt(sms_cgid), Integer.parseInt(sms_csid), 
+					telephone, sms_content);
+			if(remote_send_status > 0)
 			{
 				status =1;
 			}
 			else
 			{
 				status =0;
+				ovo =new OVO(-1,"发送短信验证码失败","发送短信验证码失败");
+				return AesUtil.encode(VOConvert.ovoToJson(ovo));
 			}
 //			status =1;
 		}
@@ -345,15 +354,18 @@ public class SMSController extends BaseController {
 //		}
 		int sms_code =NumberUtils.getSixRandomNumber();
 //		String sms_content ="欢迎使用吃香喝辣,您的验证码是:"+sms_code+"【房不剩房】";
-		String sms_content ="1074吃香喝辣带您免费吃遍南宁，更换手机号码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。【吃香喝辣】";
+		String sms_content ="1074吃香喝辣带您免费吃遍南宁，更换手机号码的验证码为："+sms_code+"，请在5分钟内完成验证。如非本机号码操作，请忽略此信息。 ";
 		//0发送失败 1发送成功 2已过期 -1本地测试短信，不发送
 		int status =0;
 		//调用第三方短信平台接口
 		long remote_send_status =0;
 		if(type.equals("1"))
 		{
+			String sms_url =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "URL");
 			String sms_sn =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "USERNAME");
 			String sms_pwd =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "PASSWORD");
+			String sms_cgid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CGID");
+			String sms_csid =systemConfigService.querySingleConfig("APP_SMS_INTERFACE", "CSID");
 			if(StringUtils.isEmptyOrNull(sms_sn) || StringUtils.isEmptyOrNull(sms_pwd))
 			{
 				ovo =new OVO(-1,"短信发送异常，请稍后再试","");
@@ -361,16 +373,19 @@ public class SMSController extends BaseController {
 			}
 			logger.info("sms_sn------------------>>"+sms_sn);
 			logger.info("sms_pwd------------------>>"+sms_pwd);
-//			SmsWebSocketClient smsClient =new SmsWebSocketClient(sms_sn,sms_pwd);
-//			remote_send_status =Long.parseLong(smsClient.mt(telephone, sms_content, "", "", ""));
-			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
-			if(remote_send_status == 0)
+//			remote_send_status =SmsWebServiceUtil.sendSms(sms_sn, sms_pwd, telephone, sms_content, "");
+			remote_send_status =SmsWebServiceUtil.sendC123Sms(sms_url, sms_sn, sms_pwd, 
+					Integer.parseInt(sms_cgid), Integer.parseInt(sms_csid), 
+					telephone, sms_content);
+			if(remote_send_status > 0)
 			{
 				status =1;
 			}
 			else
 			{
 				status =0;
+				ovo =new OVO(-1,"发送短信验证码失败","发送短信验证码失败");
+				return AesUtil.encode(VOConvert.ovoToJson(ovo));
 			}
 //			status =1;
 		}

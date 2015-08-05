@@ -108,13 +108,15 @@ public class LoginController extends BaseController {
 		boolean boolCode = captcha.toUpperCase().equals(sessionCaptcha);
 		if (!boolCode) {
 			model.addAttribute("error", message("framework.validatecode.error"));
-			return "Login";
+			addFlashMessage(redirectAttributes, Message.error(message("framework.validatecode.error")));
+			return "redirect:/login/ShopLogin.do";
 		}
 		Row shopRow =shopAdminService.findByShopId(shop_id);
 		if(shopRow == null)
 		{
 			model.addAttribute("error", "商户账号不存在");
-			return "ShopLogin.do";
+			addFlashMessage(redirectAttributes, Message.error("商户账号不存在"));
+			return "redirect:/login/ShopLogin.do";
 		}
 		System.out.println("shop_id============>>"+shop_id);
 		String rtx_id =shopRow.getString("id","");
@@ -132,11 +134,13 @@ public class LoginController extends BaseController {
 		} catch (JException e) {
 			e.printStackTrace();
 			model.addAttribute("error", e.getMsg());
-			return "ShopLogin.do";
+			addFlashMessage(redirectAttributes, Message.error("登录出错"));
+			return "redirect:/login/ShopLogin.do";
 		}
 		Row staff = loginService.getRow();
 		staff.put("shop_id", shop_id);
 		session.setAttribute("staff", staff);
+		session.setAttribute("third_login", "cxhl_shop_admin");
 		return "redirect:/main/menu/main.do";
 	}
 	

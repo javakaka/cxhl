@@ -33,6 +33,8 @@ public class SmsContrller  extends BaseController{
 		String username ="";
 		String password ="";
 		String sms_switch ="";
+		String cgid ="";
+		String csid ="";
 		String busi_code ="";
 		if( ds != null && ds.size()>0 )
 		{
@@ -56,28 +58,43 @@ public class SmsContrller  extends BaseController{
 				{
 					sms_switch =row.getString("busi_code_set","");
 				}
+				else if(busi_code.equals("CGID"))
+				{
+					cgid =row.getString("busi_code_set","");
+				}
+				else if(busi_code.equals("CSID"))
+				{
+					csid =row.getString("busi_code_set","");
+				}
 			}
 		}
 		model.addAttribute("url", url);
 		model.addAttribute("username", username);
 		model.addAttribute("password", password);
 		model.addAttribute("sms_switch", sms_switch);
+		model.addAttribute("cgid", cgid);
+		model.addAttribute("csid", csid);
 		model.addAttribute("busi_type", "APP_SMS_INTERFACE");
 		return "/fzbpage/platform/sms_setting/SmsSetting";
 	}
 	
 	
 	@RequestMapping(value = "/SaveSmsSetting")
-	public String save(String url, String username,String password,String sms_switch,ModelMap model,RedirectAttributes redirectAttributes) {
+	public String save(String url, String username,String password,String sms_switch,
+			String cgid,String csid,ModelMap model,RedirectAttributes redirectAttributes) {
 		Assert.notNull(url, "url 不能为空");
 		Assert.notNull(username, "username 不能为空");
 		Assert.notNull(password, "password 不能为空");
 		Assert.notNull(sms_switch, "是否开放短信注册不能为空");
+		Assert.notNull(cgid, "通道组编号不能为空");
+		Assert.notNull(csid, "默认使用的签名编号(未指定签名编号时传此值到服务器)");
 		String busi_type="APP_SMS_INTERFACE";
 		systemConfigService.setConfigData(busi_type,"URL",url,"发送短信的url");
 		systemConfigService.setConfigData(busi_type,"USERNAME",username,"短信接口用户名");
 		systemConfigService.setConfigData(busi_type,"PASSWORD",password,"短信接口用户密码");
 		systemConfigService.setConfigData(busi_type,"SWITCH",sms_switch,"是否开放短信注册1开放0关闭");
+		systemConfigService.setConfigData(busi_type,"CGID",cgid,"通道组编号");
+		systemConfigService.setConfigData(busi_type,"CSID",csid,"默认使用的签名编号(未指定签名编号时传此值到服务器)");
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:SmsSetting.do";
 	}
