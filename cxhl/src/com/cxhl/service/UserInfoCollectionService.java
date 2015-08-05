@@ -22,18 +22,19 @@ import com.ezcloud.utility.DateUtil;
  * @author shike001 
  * E-mail:510836102@qq.com   
  * @version 创建时间：2014-12-26 下午3:14:51  
- * 类说明: 商家分类
+ * 类说明: 资讯收藏
  */
 
-@Component("cxhlShopTypeService")
-public class ShopTypeService extends Service{
+@Component("cxhlInfoCollectionService")
+public class UserInfoCollectionService extends Service{
 
-	public ShopTypeService() {
+	public UserInfoCollectionService() {
 		
 	}
 
 	
 	/**
+	 * 详情
 	 * @param id
 	 * @return
 	 */
@@ -41,31 +42,33 @@ public class ShopTypeService extends Service{
 	public Row find(String id)
 	{
 		Row row =null;
-		String sSql ="select a.*,c.FILE_PATH from cxhl_shop_type a "
-				+" left join file_attach_control b on a.id=b.DEAL_CODE and b.DEAL_TYPE='shop_type_icon' " 
-				+" left join file_attach_upload c on b.CONTROL_ID=c.CONTROL_ID  "
-				+" where a.id ='"+id+"' ";
+		String sSql ="select * from cxhl_info_collection where id='"+id+"' ";
 		row =queryRow(sSql);
 		return row;
 	}
-	
-	public Row findByUserIdAndShopId(String user_id,String shop_id)
+	/**
+	 * 详情
+	 * @param id
+	 * @return
+	 */
+	@Transactional(value="jdbcTransactionManager",readOnly = true)
+	public Row findByUserIdAndInfoId(String user_id,String info_id)
 	{
 		Row row =null;
-		String sSql =" select * from cxhl_shop_type where user_id='"+user_id+"' and c_id='"+shop_id+"' ";
+		String sSql ="select * from cxhl_info_collection where user_id='"+user_id+"' and info_id='"+info_id+"' ";
 		row =queryRow(sSql);
 		return row;
 	}
-	
 	
 	@Transactional(value="jdbcTransactionManager",propagation=Propagation.REQUIRED)
 	public int insert(Row row)
 	{
 		int num =0;
-		int id =getTableSequence("cxhl_shop_type", "id", 1);
+		int id =getTableSequence("cxhl_info_collection", "id", 1);
 		row.put("id", id);
-		row.put("create_time", DateUtil.getCurrentDateTime());
-		num =insert("cxhl_shop_type", row);
+		String cur_time=DateUtil.getCurrentDateTime();
+		row.put("create_time", cur_time);
+		num =insert("cxhl_info_collection", row);
 		return num;
 	}
 	
@@ -74,9 +77,8 @@ public class ShopTypeService extends Service{
 	{
 		int num =0;
 		String id =row.getString("id",null);
-		row.put("modify_time", DateUtil.getCurrentDateTime());
 		Assert.notNull(id);
-		num =update("cxhl_shop_type", row, " id='"+id+"'");
+		num =update("cxhl_info_collection", row, " id='"+id+"'");
 		return num;
 	}
 	
@@ -91,18 +93,18 @@ public class ShopTypeService extends Service{
 	public Page queryPage() {
 		Page page = null;
 		Pageable pageable = (Pageable) row.get("pageable");
-		sql ="select a.*,c.FILE_PATH from cxhl_shop_type a "
-		+" left join file_attach_control b on a.id=b.DEAL_CODE and b.DEAL_TYPE='shop_type_icon' "
-		+" left join file_attach_upload c on b.CONTROL_ID=c.CONTROL_ID "
-		+" order by a.level_index ";
+		sql ="select * from ( "
+				+" select a.*,b.c_name as shop_name from cxhl_info_collection a "
+				+" left join cxhl_shop b on a.shop_id=b.id "
+				+" ) as tab  where 1=1 ";
 		String restrictions = addRestrictions(pageable);
 		String orders = addOrders(pageable);
 		sql += restrictions;
 		sql += orders;
-		String countSql ="select count(*) from cxhl_shop_type a "
-				+" left join file_attach_control b on a.id=b.DEAL_CODE and b.DEAL_TYPE='shop_type_icon' "
-				+" left join file_attach_upload c on b.CONTROL_ID=c.CONTROL_ID "
-				+" order by a.level_index ";
+		String countSql ="select count(*) from ( "
+				+" select a.*,b.c_name as shop_name from cxhl_info_collection a "
+				+" left join cxhl_shop b on a.shop_id=b.id "
+				+" ) as tab  where 1=1 ";
 		countSql += restrictions;
 		countSql += orders;
 		long total = count(countSql);
@@ -117,15 +119,23 @@ public class ShopTypeService extends Service{
 		return page;
 	}
 	
-	
 	@SuppressWarnings("unchecked")
-	public DataSet list()
+	public DataSet list(String user_id,String page,String page_size)
 	{
+		int iStart =(Integer.parseInt(page)-1)*Integer.parseInt(page_size);
+		
 		DataSet ds =new DataSet();
-		String sSql ="select a.*,c.FILE_PATH from cxhl_shop_type a "
-				+" left join file_attach_control b on a.id=b.DEAL_CODE and b.DEAL_TYPE='shop_type_icon' "
-				+" left join file_attach_upload c on b.CONTROL_ID=c.CONTROL_ID "
-				+" order by a.level_index ";
+		String sSql ="select a.*,b.title,b.subtitle,b.create_date,b.up_num " 
+		+" from cxhl_info_collection a "
+		+" left join cxhl_info b on a.info_id =b.id "
+		+" left join file_attach_control c on c.DEAL_CODE=b.id and c.DEAL_TYPE='info_icon'  "
+		+" left join file_attach_upload d on c.CONTROL_ID=d.CONTROL_ID  "
+		+" where 1=1 ";
+		if(! StringUtils.isEmptyOrNull(user_id))
+		{
+			sSql +=" and a.user_id ='"+user_id+"' ";
+		}
+		sSql +=" limit "+iStart+" , "+page_size;	
 		ds =queryDataSet(sSql);
 		Setting setting =SettingUtils.get();
 		String site_url =setting.getSiteUrl();
@@ -156,13 +166,6 @@ public class ShopTypeService extends Service{
 		return ds;
 	}
 	
-	public DataSet querySummaryList()
-	{
-		DataSet ds =new DataSet();
-		String sSql =" select id,name from cxhl_shop_type order by level_index ";
-		ds =queryDataSet(sSql);
-		return ds;
-	}
 	
 	/**
 	 * 删除
@@ -181,37 +184,9 @@ public class ShopTypeService extends Service{
 				}
 				id += "'" + String.valueOf(ids[i]) + "'";
 			}
-			sql = "delete from cxhl_shop_type where id in(" + id + ")";
+			sql = "delete from cxhl_info_collection where id in (" + id + ")";
 			update(sql);
 		}
-	}
-	
-	@Transactional(value="jdbcTransactionManager",readOnly = true)
-	public boolean isNameExisted(String name)
-	{
-		boolean bool =true;
-		String sql ="select count(*) from cxhl_shop_type where name ='"+name+"'";
-		String count =queryField(sql);
-		int sum =Integer.parseInt(count);
-		if(sum >0)
-			bool =false;
-		else
-			bool =true;
-		return bool;
-	}
-	
-	@Transactional(value="jdbcTransactionManager",readOnly = true)
-	public boolean isExtraNameExisted(String id, String name)
-	{
-		boolean bool =true;
-		String sql ="select count(*) from cxhl_shop_type where name ='"+name+"' and id !='"+id+"'";
-		String count =queryField(sql);
-		int sum =Integer.parseInt(count);
-		if(sum >0)
-			bool =false;
-		else
-			bool =true;
-		return bool;
 	}
 	
 }
